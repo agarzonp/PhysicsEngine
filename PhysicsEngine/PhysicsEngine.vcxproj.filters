@@ -28,6 +28,12 @@
     <Filter Include="Source Files\TestEnvironment\Camera">
       <UniqueIdentifier>{a4d5ac11-42e9-4c93-9367-7eeb648d9761}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\TestEnvironment\Physics">
+      <UniqueIdentifier>{416bad13-7dd9-40e6-b75d-30cd4056c0bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\TestEnvironment\Physics\PhysicObject">
+      <UniqueIdentifier>{83913362-b594-469c-a0d3-c2ff0f8481db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\Shaders\basic.frag">
@@ -52,6 +58,27 @@
     </ClInclude>
     <ClInclude Include="src\TestEnvironment\Camera\FreeCamera.h">
       <Filter>Source Files\TestEnvironment\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Physics\PhysicsObject\Particle.h">
+      <Filter>Source Files\TestEnvironment\Physics\PhysicObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Physics\PhysicsEngine.h">
+      <Filter>Source Files\TestEnvironment\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Physics\PhysicsObject\PhysicObject.h">
+      <Filter>Source Files\TestEnvironment\Physics\PhysicObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestEnvironment\GameObject.h">
+      <Filter>Source Files\TestEnvironment</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Physics\PhysicsObject\PhysicObjectDesc.h">
+      <Filter>Source Files\TestEnvironment\Physics\PhysicObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestEnvironment\MathGeom.h">
+      <Filter>Source Files\TestEnvironment</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestEnvironment\CubeRenderable.h">
+      <Filter>Source Files\TestEnvironment</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

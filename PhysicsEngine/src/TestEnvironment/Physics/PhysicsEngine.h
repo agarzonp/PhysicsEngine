@@ -20,7 +20,7 @@ class PhysicsEngine
 public:
 
 	// Add physic to the game object
-	void AddPhysics(GameObject& object, const PhysicObjectDesc& desc)
+	IPhysicObject* AddPhysics(GameObject& object, const PhysicObjectDesc& desc)
 	{
 		switch (desc.type)
 		{
@@ -33,9 +33,11 @@ public:
 			default:
 			{
 				printf("PhysicObjectType (%d) not handled", (int)desc.type);
-				break;
+				return nullptr;
 			}
 		}
+
+		return physicObjects.back();
 	}
 
 	// Integrate each physic object

@@ -4,6 +4,8 @@
 #include "CubeRenderable.h"
 #include "MathGeom.h"
 
+#include "Physics/PhysicsObject/IPhysicObject.h"
+
 struct Transform_
 {
 	MathGeom::Vector3 position;
@@ -15,6 +17,8 @@ class GameObject
 {
 	Transform_ transform;
 	CubeRenderable renderable;
+
+	IPhysicObject* physicObject{ nullptr };
 
 public:
 
@@ -30,6 +34,9 @@ public:
 	
 	void SetVisible(bool visible) { renderable.SetVisible(visible); }
 	bool IsVisible() { return renderable.IsVisible(); }
+
+	void SetPhysicObject(IPhysicObject* physicsObj) { physicObject = physicsObj; }
+	IPhysicObject* GetPhysicObject() { return physicObject; }
 };
 
 #endif // !GAME_OBJECT_H

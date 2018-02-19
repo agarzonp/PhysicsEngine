@@ -80,6 +80,9 @@
     <ClInclude Include="src\TestEnvironment\CubeRenderable.h">
       <Filter>Source Files\TestEnvironment</Filter>
     </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Physics\PhysicsObject\IPhysicObject.h">
+      <Filter>Source Files\TestEnvironment\Physics\PhysicObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">

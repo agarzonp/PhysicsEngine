@@ -46,6 +46,12 @@ public:
 	{
     camera.Update(deltaTime);
 
+		auto physicObject = gameObjects[6].GetPhysicObject();
+		if (physicObject)
+		{
+			physicObject->AddForce({ 0.0f, -9.8f * physicObject->Mass(), 0.0f });
+		}
+
 		physicsEngine.Integrate(deltaTime);
 	}
 
@@ -206,11 +212,12 @@ protected:
 	{
 		PhysicObjectDesc desc;
 		desc.type = PhysicObjectType::PARTICLE;
-		desc.mass = 1.0f;
+		desc.mass = 10.0f;
 		desc.velocity = MathGeom::Vector3(-2.0f, 0.0f, 0.0f);
 		desc.acceleration = MathGeom::Vector3(-10.0f, 0.0f, 0.0f);
 
-		physicsEngine.AddPhysics(gameObjects[6], desc);
+		auto physicObject = physicsEngine.AddPhysics(gameObjects[6], desc);
+		gameObjects[6].SetPhysicObject(physicObject);
 	}
 
 	void Terminate()

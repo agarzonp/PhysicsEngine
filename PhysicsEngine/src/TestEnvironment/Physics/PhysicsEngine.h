@@ -4,6 +4,8 @@
 #include <vector>
 
 #include "../GameObject.h"
+
+#include "Forces/Forces.h"
 #include "PhysicsObject/PhysicObjectDesc.h"
 #include "PhysicsObject/Particle.h"
 
@@ -16,6 +18,12 @@ class PhysicsEngine
 	// particles
 	using Particles = std::vector<Particle>;
 	Particles particles;
+
+	// forces map
+	using ForcesMapEntryFirst = PhysicObject*;
+	using ForcesMapEntrySecond = std::vector<std::unique_ptr<IForce>>;
+	using ForcesMap = std::map<ForcesMapEntryFirst, ForcesMapEntrySecond>;
+	ForcesMap forcesMap;
 
 public:
 
@@ -37,7 +45,43 @@ public:
 			}
 		}
 
+		// add gravity force
+		auto forcesMapEntry = forcesMap.find(physicObjects.back());
+		if (forcesMapEntry == forcesMap.end())
+		{
+			forcesMap.insert(std::pair<ForcesMapEntryFirst, ForcesMapEntrySecond>(physicObjects.back(), ForcesMapEntrySecond()));
+			forcesMapEntry = forcesMap.find(physicObjects.back());
+		}
+		
+		forcesMapEntry->second.emplace_back(std::make_unique<GravityForce>(MathGeom::Vector3(0.0f, -9.8f, 0.0f)));
+		
+
 		return physicObjects.back();
+	}
+
+	// Update
+	void Update(float deltaTime)
+	{
+		// add forces
+		AddForces();
+		
+		// Integrate
+		Integrate(deltaTime);
+	}
+
+private:
+
+	// Add forces
+	void AddForces()
+	{
+		for (auto& forceEntry : forcesMap)
+		{
+			PhysicObject& physicObject = *forceEntry.first;
+			for (auto& force : forceEntry.second)
+			{
+				force->AddTo(physicObject);
+			}
+		}
 	}
 
 	// Integrate each physic object

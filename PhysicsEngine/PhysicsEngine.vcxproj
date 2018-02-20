@@ -137,6 +137,9 @@ xcopy /Y /E "$(SolutionDir)common\lib\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="src\TestEnvironment\CubeRenderable.h" />
     <ClInclude Include="src\TestEnvironment\GameObject.h" />
     <ClInclude Include="src\TestEnvironment\MathGeom.h" />
+    <ClInclude Include="src\TestEnvironment\Physics\Forces\Forces.h" />
+    <ClInclude Include="src\TestEnvironment\Physics\Forces\GravityForce.h" />
+    <ClInclude Include="src\TestEnvironment\Physics\Forces\IForce.h" />
     <ClInclude Include="src\TestEnvironment\Physics\PhysicsEngine.h" />
     <ClInclude Include="src\TestEnvironment\Physics\PhysicsObject\IPhysicObject.h" />
     <ClInclude Include="src\TestEnvironment\Physics\PhysicsObject\Particle.h" />

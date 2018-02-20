@@ -34,6 +34,9 @@
     <Filter Include="Source Files\TestEnvironment\Physics\PhysicObject">
       <UniqueIdentifier>{83913362-b594-469c-a0d3-c2ff0f8481db}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\TestEnvironment\Physics\Forces">
+      <UniqueIdentifier>{d224aa8a-553e-49f1-aeae-2703815b964e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\Shaders\basic.frag">
@@ -82,6 +85,15 @@
     </ClInclude>
     <ClInclude Include="src\TestEnvironment\Physics\PhysicsObject\IPhysicObject.h">
       <Filter>Source Files\TestEnvironment\Physics\PhysicObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Physics\Forces\IForce.h">
+      <Filter>Source Files\TestEnvironment\Physics\Forces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Physics\Forces\GravityForce.h">
+      <Filter>Source Files\TestEnvironment\Physics\Forces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Physics\Forces\Forces.h">
+      <Filter>Source Files\TestEnvironment\Physics\Forces</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

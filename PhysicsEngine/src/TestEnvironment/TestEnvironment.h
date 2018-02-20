@@ -46,13 +46,7 @@ public:
 	{
     camera.Update(deltaTime);
 
-		auto physicObject = gameObjects[6].GetPhysicObject();
-		if (physicObject)
-		{
-			physicObject->AddForce({ 0.0f, -9.8f * physicObject->Mass(), 0.0f });
-		}
-
-		physicsEngine.Integrate(deltaTime);
+		physicsEngine.Update(deltaTime);
 	}
 
 	void Render() 

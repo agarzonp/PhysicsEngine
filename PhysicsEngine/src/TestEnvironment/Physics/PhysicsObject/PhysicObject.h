@@ -28,7 +28,7 @@ public:
 		: gameObject(&gameObject_)
 		, mass(desc.mass)
 		, inverseMass(desc.mass > 0.0f ? 1.0f/desc.mass : 0.0f)
-		, position(gameObject_.Transform().position)
+		, position(gameObject_.transform.position)
 		, velocity(desc.velocity)
 		, acceleration(desc.acceleration)
 	{

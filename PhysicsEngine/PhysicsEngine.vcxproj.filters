@@ -37,6 +37,12 @@
     <Filter Include="Source Files\TestEnvironment\Physics\Forces">
       <UniqueIdentifier>{d224aa8a-553e-49f1-aeae-2703815b964e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\TestEnvironment\Render">
+      <UniqueIdentifier>{0dcb76f7-d336-4f3f-8811-763afecbafff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\TestEnvironment\Render\Meshes">
+      <UniqueIdentifier>{6df51e20-56c2-4ff3-956e-8608e01532f8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\Shaders\basic.frag">
@@ -80,9 +86,6 @@
     <ClInclude Include="src\TestEnvironment\MathGeom.h">
       <Filter>Source Files\TestEnvironment</Filter>
     </ClInclude>
-    <ClInclude Include="src\TestEnvironment\CubeRenderable.h">
-      <Filter>Source Files\TestEnvironment</Filter>
-    </ClInclude>
     <ClInclude Include="src\TestEnvironment\Physics\PhysicsObject\IPhysicObject.h">
       <Filter>Source Files\TestEnvironment\Physics\PhysicObject</Filter>
     </ClInclude>
@@ -94,6 +97,18 @@
     </ClInclude>
     <ClInclude Include="src\TestEnvironment\Physics\Forces\Forces.h">
       <Filter>Source Files\TestEnvironment\Physics\Forces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Transform.h">
+      <Filter>Source Files\TestEnvironment</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Render\Renderable.h">
+      <Filter>Source Files\TestEnvironment\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Render\Meshes\Mesh.h">
+      <Filter>Source Files\TestEnvironment\Render\Meshes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Render\Meshes\CubeMesh.h">
+      <Filter>Source Files\TestEnvironment\Render\Meshes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

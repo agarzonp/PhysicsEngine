@@ -134,7 +134,6 @@ xcopy /Y /E "$(SolutionDir)common\lib\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="src\Shaders\Shader.h" />
     <ClInclude Include="src\TestEnvironment\Camera\Camera.h" />
     <ClInclude Include="src\TestEnvironment\Camera\FreeCamera.h" />
-    <ClInclude Include="src\TestEnvironment\CubeRenderable.h" />
     <ClInclude Include="src\TestEnvironment\GameObject.h" />
     <ClInclude Include="src\TestEnvironment\MathGeom.h" />
     <ClInclude Include="src\TestEnvironment\Physics\Forces\Forces.h" />
@@ -145,7 +144,11 @@ xcopy /Y /E "$(SolutionDir)common\lib\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="src\TestEnvironment\Physics\PhysicsObject\Particle.h" />
     <ClInclude Include="src\TestEnvironment\Physics\PhysicsObject\PhysicObject.h" />
     <ClInclude Include="src\TestEnvironment\Physics\PhysicsObject\PhysicObjectDesc.h" />
+    <ClInclude Include="src\TestEnvironment\Render\Meshes\CubeMesh.h" />
+    <ClInclude Include="src\TestEnvironment\Render\Meshes\Mesh.h" />
+    <ClInclude Include="src\TestEnvironment\Render\Renderable.h" />
     <ClInclude Include="src\TestEnvironment\TestEnvironment.h" />
+    <ClInclude Include="src\TestEnvironment\Transform.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />

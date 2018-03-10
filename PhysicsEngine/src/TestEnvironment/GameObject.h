@@ -1,42 +1,45 @@
 #ifndef GAME_OBJECT_H
 #define GAME_OBJECT_H
 
-#include "CubeRenderable.h"
+#include "Render/Renderable.h"
 #include "MathGeom.h"
 
 #include "Physics/PhysicsObject/IPhysicObject.h"
 
-struct Transform_
-{
-	MathGeom::Vector3 position;
-	MathGeom::Vector3 rotation;
-	MathGeom::Vector3 scale;
-};
+#include "Transform.h"
 
 class GameObject
 {
-	Transform_ transform;
-	CubeRenderable renderable;
-
+	// physic object
 	IPhysicObject* physicObject{ nullptr };
+
+	// renderable
+	Renderable renderable;
 
 public:
 
-	GameObject() {};
+	// Transform
+	Transform transform;
 
-	const Transform_& Transform() const { return transform; }
-	Transform_& Transform() { return transform; }
+public:
 
+	// Set position
 	void SetPosition(MathGeom::Vector3& pos) {transform.position = pos; }
 
-	const CubeRenderable& GetRenderable() const { return renderable; }
-	void SetRenderable(const CubeRenderable& renderable_) { renderable = renderable_; }
-	
-	void SetVisible(bool visible) { renderable.SetVisible(visible); }
-	bool IsVisible() { return renderable.IsVisible(); }
+	// Set renderable
+	void SetRenderable(const Renderable& renderable_) { renderable = renderable_; }
 
+	// Set visible
+	void SetVisible(bool visible) { renderable.SetVisible(visible); }
+
+	// Set physics object
 	void SetPhysicObject(IPhysicObject* physicsObj) { physicObject = physicsObj; }
-	IPhysicObject* GetPhysicObject() { return physicObject; }
+
+	// Render
+	void Render(const glm::mat4& viewProjection)
+	{
+		renderable.Render(viewProjection, transform);
+	}
 };
 
 #endif // !GAME_OBJECT_H

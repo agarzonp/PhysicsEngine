@@ -15,6 +15,7 @@
 #include "GameObject.h"
 
 #include "Render/Meshes/CubeMesh.h"
+#include "Render/Meshes/SphereMesh.h"
 #include "Render/Renderable.h"
 
 #include "Physics/PhysicsEngine.h"
@@ -168,6 +169,9 @@ private:
 
 	// cube mesh
 	CubeMesh cubeMesh;
+
+	// sphere mesh
+	SphereMesh sphereMesh;
 
 	// Camera
 	FreeCamera camera;

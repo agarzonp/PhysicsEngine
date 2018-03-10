@@ -33,39 +33,18 @@ class CubeMesh : public Mesh
 
 public:
 
-	// Render
-	void Render()
-	{
-		// tell the vertexArrayObject to be used
-		glBindVertexArray(vertexArrayObject);
-
-		// tell to draw cube by using the IBO
-		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void*)indices);
-
-		// do not use the vertexArrayObject anymore
-		glBindVertexArray(0);
-	}
-
-private:
-
-	void InitVBO()
+	void Init() final
 	{
 		// create numVBO buffers in the GPU, use it as an array buffer and set the data
 		glGenBuffers(numVBO, &vertexBufferObject);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	}
 
-	void InitIBO()
-	{
 		// create numIBO buffer in the GPU, use it as an element array buffer and set the data
 		glGenBuffers(numIBO, &indexBufferObject);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-	}
 
-	void InitVAO()
-	{
 		// create one vertex array object for drawing and use it. This vertexArrayObject is the one who will deal with the vertex buffer
 		glGenVertexArrays(numVAO, &vertexArrayObject);
 		glBindVertexArray(vertexArrayObject);
@@ -77,6 +56,19 @@ private:
 
 		// Enable the 0 attribute
 		glEnableVertexAttribArray(0);
+	}
+
+	// Render
+	void Render() final
+	{
+		// tell the vertexArrayObject to be used
+		glBindVertexArray(vertexArrayObject);
+
+		// tell to draw cube by using the IBO
+		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void*)indices);
+
+		// do not use the vertexArrayObject anymore
+		glBindVertexArray(0);
 	}
 };
 #endif // !CUBE_MESH_H

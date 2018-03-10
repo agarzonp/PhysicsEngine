@@ -6,9 +6,9 @@ class Mesh
 protected:
 
 	// vbo, vao, ibo 
-	GLuint vertexBufferObject;
-	GLuint indexBufferObject;
-	GLuint vertexArrayObject;
+	GLuint vertexBufferObject{ 0 };
+	GLuint indexBufferObject{ 0 };
+	GLuint vertexArrayObject{ 0 };
 
 	GLsizei numVBO{ 1 };
 	GLsizei numIBO{ 1 };
@@ -18,12 +18,7 @@ public:
 	virtual ~Mesh() { Terminate(); }
 
 	// Init
-	void Init()
-	{
-		InitVBO();
-		InitIBO();
-		InitVAO();
-	}
+	virtual void Init() = 0;
 
 	// Render
 	virtual void Render() = 0;
@@ -33,14 +28,21 @@ protected:
 	// Terminate
 	void Terminate()
 	{
-		glDeleteVertexArrays(numVAO, &vertexArrayObject);
-		glDeleteBuffers(numIBO, &indexBufferObject);
-		glDeleteBuffers(numVBO, &vertexBufferObject);
+		if (vertexArrayObject)
+		{
+			glDeleteVertexArrays(numVAO, &vertexArrayObject);
+		}
+		
+		if (indexBufferObject)
+		{
+			glDeleteBuffers(numIBO, &indexBufferObject);
+		}
+		
+		if (vertexBufferObject)
+		{
+			glDeleteBuffers(numVBO, &vertexBufferObject);
+		}
 	}
-
-	virtual void InitVBO() = 0;
-	virtual void InitIBO() = 0;
-	virtual void InitVAO() = 0;
 };
 
 #endif // !MESH_H

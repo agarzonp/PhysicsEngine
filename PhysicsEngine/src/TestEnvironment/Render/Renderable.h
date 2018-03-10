@@ -21,10 +21,10 @@ class Renderable
 public:
 	// Constructors
 	Renderable() = default;
-	Renderable(const glm::vec4& color_, Mesh* mesh_, Shader& shader_)
-		: color(color_) 
-		, mesh(mesh_)
+	Renderable(Mesh* mesh_, Shader& shader_, const glm::vec4& color_)
+		: mesh(mesh_)
 		, shader(&shader_)
+		, color(color_)
 	{
 	}
 
@@ -39,13 +39,8 @@ public:
 			return;
 		}
 
-		// build the model
-		glm::mat4 model = glm::mat4();
-		model = glm::translate(model, transform.position)
-			* glm::rotate(model, transform.rotation.z, glm::vec3(0.0f, 0.0f, 1.0f))
-			* glm::rotate(model, transform.rotation.y, glm::vec3(0.0f, 1.0f, 0.0f))
-			* glm::rotate(model, transform.rotation.x, glm::vec3(1.0f, 0.0f, 0.0f))
-			* glm::scale(model, transform.scale);
+		// build the model matrix
+		glm::mat4 model = ModelMatrix(transform);
 
 		// set uniforms
 		shader->SetUniform("modelViewProjection", viewProjection * model);
@@ -53,6 +48,21 @@ public:
 
 		// render the mesh
 		mesh->Render();
+	}
+
+protected:
+
+	virtual glm::mat4 ModelMatrix(const Transform& transform)
+	{
+		glm::mat4 model = glm::mat4();
+
+		model = glm::translate(model, transform.position)
+			* glm::rotate(model, transform.rotation.z, glm::vec3(0.0f, 0.0f, 1.0f))
+			* glm::rotate(model, transform.rotation.y, glm::vec3(0.0f, 1.0f, 0.0f))
+			* glm::rotate(model, transform.rotation.x, glm::vec3(1.0f, 0.0f, 0.0f))
+			* glm::scale(model, transform.scale);
+
+		return model;
 	}
 };
 

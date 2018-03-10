@@ -7,7 +7,7 @@ struct Transform
 {
 	MathGeom::Vector3 position;
 	MathGeom::Vector3 rotation;
-	MathGeom::Vector3 scale;
+	MathGeom::Vector3 scale { 1.0f, 1.0f , 1.0f };
 };
 
 #endif

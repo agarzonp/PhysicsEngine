@@ -113,6 +113,9 @@
     <ClInclude Include="src\TestEnvironment\Render\Meshes\SphereMesh.h">
       <Filter>Source Files\TestEnvironment\Render\Meshes</Filter>
     </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Render\SphereRenderable.h">
+      <Filter>Source Files\TestEnvironment\Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">

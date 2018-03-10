@@ -17,6 +17,7 @@
 #include "Render/Meshes/CubeMesh.h"
 #include "Render/Meshes/SphereMesh.h"
 #include "Render/Renderable.h"
+#include "Render/SphereRenderable.h"
 
 #include "Physics/PhysicsEngine.h"
 
@@ -93,7 +94,7 @@ protected:
 		// floor
 		gameObject.transform.position = glm::vec3(0.0f, 0.0f, 10.0f);
 		gameObject.transform.scale = glm::vec3(40.0f, 0.0001f, 40.f);
-		gameObject.SetRenderable(Renderable(glm::vec4(0.8f, 0.8f, 0.8f, 1.0f), &cubeMesh, shader));
+		gameObject.SetRenderable(std::make_shared<Renderable>(&cubeMesh, shader, glm::vec4(0.8f, 0.8f, 0.8f, 1.0f)));
 		gameObject.SetVisible(true);
 
 		gameObjects.emplace_back(gameObject);
@@ -101,46 +102,48 @@ protected:
 		// walls
 		gameObject.transform.position = glm::vec3(40.0f, 5.0f, 10.0f);
 		gameObject.transform.scale = glm::vec3(0.5f, 5.0f, 40.f);
-		gameObject.SetRenderable(Renderable(glm::vec4(0.11f, 0.11f, 0.11f, 1.0f), &cubeMesh, shader));
+		gameObject.SetRenderable(std::make_shared<Renderable>(&cubeMesh, shader, glm::vec4(0.11f, 0.11f, 0.11f, 1.0f)));
 		gameObject.SetVisible(true);
 
 		gameObjects.emplace_back(gameObject);
 
 		gameObject.transform.position = glm::vec3(-40.0f, 5.0f, 10.0f);
 		gameObject.transform.scale = glm::vec3(0.5f, 5.0f, 40.f);
-		gameObject.SetRenderable(Renderable(glm::vec4(0.11f, 0.11f, 0.11f, 1.0f), &cubeMesh, shader));
+		gameObject.SetRenderable(std::make_shared<Renderable>(&cubeMesh, shader, glm::vec4(0.11f, 0.11f, 0.11f, 1.0f)));
 		gameObject.SetVisible(true);
 
 		gameObjects.emplace_back(gameObject);
 
 		gameObject.transform.position = glm::vec3(0.0f, 5.0f, 50.0f);
 		gameObject.transform.scale = glm::vec3(40.0f, 5.0f, 0.5f);
-		gameObject.SetRenderable(Renderable(glm::vec4(0.11f, 0.11f, 0.11f, 1.0f), &cubeMesh, shader));
+		gameObject.SetRenderable(std::make_shared<Renderable>(&cubeMesh, shader, glm::vec4(0.11f, 0.11f, 0.11f, 1.0f)));
 		gameObject.SetVisible(true);
 
 		gameObjects.emplace_back(gameObject);
 
 		gameObject.transform.position = glm::vec3(0.0f, 5.0f, -30.0f);
 		gameObject.transform.scale = glm::vec3(40.0f, 5.0f, 0.5f);
-		gameObject.SetRenderable(Renderable(glm::vec4(0.11f, 0.11f, 0.11f, 1.0f), &cubeMesh, shader));
+		gameObject.SetRenderable(std::make_shared<Renderable>(&cubeMesh, shader, glm::vec4(0.11f, 0.11f, 0.11f, 1.0f)));
 		gameObject.SetVisible(true);
 
 		gameObjects.emplace_back(gameObject);
 
-		// red cubes
+		// green sphere
 
-		gameObject.transform.position = glm::vec3(-20.0f, 2.5f, -18.0f);
+		gameObject.transform.position = glm::vec3(-20.0f, 5.5f, 40.0f);
 		gameObject.transform.rotation = glm::vec3(0.5f, 0.5f, 0.0f);
-		gameObject.transform.scale = glm::vec3(2.5f, 2.5f, 2.5f);
-		gameObject.SetRenderable(Renderable(glm::vec4(0.5f, 0.0f, 0.0f, 1.0f), &cubeMesh, shader));
+		gameObject.transform.scale = glm::vec3(1.0f, 1.0f, 1.0f);
+		gameObject.SetRenderable(std::shared_ptr<Renderable>(static_cast<Renderable*>(new SphereRenderable(3.0f, &sphereMesh, shader, glm::vec4(0.0f, 0.3f, 0.0f, 1.0f)))));
 		gameObject.SetVisible(true);
 
 		gameObjects.emplace_back(gameObject);
+
+		// red cube
 
 		gameObject.transform.position = glm::vec3(25.0f, 2.5f, 40.0f);
 		gameObject.transform.rotation = glm::vec3(0.5f, 0.5f, 0.0f);
 		gameObject.transform.scale = glm::vec3(2.5f, 2.5f, 2.5f);
-		gameObject.SetRenderable(Renderable(glm::vec4(0.5f, 0.0f, 0.0f, 1.0f), &cubeMesh, shader));
+		gameObject.SetRenderable(std::make_shared<Renderable>(&cubeMesh, shader, glm::vec4(0.5f, 0.0f, 0.0f, 1.0f)));
 		gameObject.SetVisible(true);
 
 		gameObjects.emplace_back(gameObject);

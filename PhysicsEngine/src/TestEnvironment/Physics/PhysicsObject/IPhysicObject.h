@@ -7,11 +7,6 @@
 
 class IPhysicObject
 {
-protected:
-
-	// collider
-	std::unique_ptr<Collider> collider;
-
 public:
 
 	// Add force
@@ -21,11 +16,7 @@ public:
 	virtual float Mass() = 0;
 
 	// Set collider
-	void SetCollider(std::unique_ptr<Collider>& collider)
-	{
-		this->collider = std::move(collider);
-	}
-
+	virtual void SetCollider(std::unique_ptr<Collider>& collider) = 0;
 };
 
 #endif // !IPHYSIC_OBJECT_H

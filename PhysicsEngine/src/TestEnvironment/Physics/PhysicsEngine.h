@@ -60,6 +60,9 @@ public:
 			}
 		}
 
+		// set collider
+		SetCollider(physicObjects.back(), desc.colliderDesc);
+
 		// register gravity force
 		if (desc.isAffectedByGravity)
 		{
@@ -93,6 +96,31 @@ public:
 	}
 
 private:
+
+	// Set collider
+	void SetCollider(PhysicObject* physicObject, const std::unique_ptr<ColliderDesc>& colliderDesc)
+	{
+		assert(colliderDesc);
+		if (colliderDesc)
+		{
+			std::unique_ptr<Collider> collider;
+
+			switch (colliderDesc->type)
+			{
+			case ColliderType::SPHERE:
+			{
+				float radius = static_cast<SphereColliderDesc*>(colliderDesc.get())->radius;
+				collider = std::make_unique<SphereCollider>(radius, colliderDesc->transform);
+				break;
+			}
+			default:
+				assert(false);
+				break;
+			}
+
+			physicObject->SetCollider(collider);
+		}
+	}
 
 	// Register force
 	void RegisterForce(PhysicObject* physicObject, std::unique_ptr<IForce>& force)

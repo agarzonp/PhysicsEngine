@@ -24,6 +24,9 @@ class PhysicObject : public IPhysicObject
 	// accumulated forces
 	MathGeom::Vector3 accumulatedForces;
 
+	// collider
+	std::unique_ptr<Collider> collider;
+
 public:
 
 	// Constructors
@@ -48,6 +51,12 @@ public:
 	float Mass() final 
 	{
 		return mass;
+	}
+
+	// Set collider
+	void SetCollider(std::unique_ptr<Collider>& collider) final
+	{
+		this->collider = std::move(collider);
 	}
 
 	// Has collider

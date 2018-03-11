@@ -32,7 +32,7 @@ private:
 		switch (GetCollisionTestType(colliderA, colliderB))
 		{
 		case CollisionTest::Type::SPHERE_SPHERE:
-			return CollisionTest::TestSphereShere(*static_cast<const SphereCollider*>(&colliderA), *static_cast<const SphereCollider*>(&colliderB));
+			return CollisionTest::SphereShere(*static_cast<const SphereCollider*>(&colliderA), *static_cast<const SphereCollider*>(&colliderB));
 		default:
 			assert(false);
 			break;

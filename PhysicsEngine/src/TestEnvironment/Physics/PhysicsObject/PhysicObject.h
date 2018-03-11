@@ -24,9 +24,6 @@ class PhysicObject : public IPhysicObject
 	// accumulated forces
 	MathGeom::Vector3 accumulatedForces;
 
-	// collider
-	std::unique_ptr<Collider> collider;
-
 public:
 
 	// Constructors
@@ -53,12 +50,6 @@ public:
 		return mass;
 	}
 
-	// Add collider
-	void AddCollider(std::unique_ptr<Collider>& collider) final
-	{
-		this->collider = std::move(collider);
-	}
-
 	// Has collider
 	bool HasCollider() const { return collider != nullptr; }
 
@@ -83,6 +74,12 @@ public:
 		// set the new position to the game object
 		gameObject->SetPosition(position);
 
+		// set the new position of the collider
+		if (collider)
+		{
+			collider->SetPosition(position);
+		}
+		
 		// reset accumulated forces
 		accumulatedForces = MathGeom::Vector3();
 	}

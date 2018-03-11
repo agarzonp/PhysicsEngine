@@ -139,7 +139,7 @@ private:
 			{
 				if (collisionDetector.IsCollision(*physicObjects[i], *physicObjects[j]))
 				{
-					printf("Collision!");
+					printf("Collision!\n");
 				}
 			}
 		}

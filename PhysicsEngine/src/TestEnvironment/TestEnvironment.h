@@ -169,7 +169,9 @@ protected:
 		desc5.acceleration = MathGeom::Vector3(10.0f, 0.0f, 0.0f);
 		desc5.isAffectedByGravity = false;
 
-		physicsEngine.AddPhysics(gameObjects[5], desc5);
+		auto physicObject = physicsEngine.AddPhysics(gameObjects[5], desc5);
+		std::unique_ptr<Collider> sphereCollider = std::make_unique<SphereCollider>(3.0f, gameObjects[5].transform);
+		physicObject->SetCollider(sphereCollider);
 
 		PhysicObjectDesc desc6;
 		desc6.type = PhysicObjectType::PARTICLE;
@@ -178,7 +180,9 @@ protected:
 		desc6.acceleration = MathGeom::Vector3(-10.0f, 0.0f, 0.0f);
 		desc6.isAffectedByGravity = false;
 
-		physicsEngine.AddPhysics(gameObjects[6], desc6);
+		physicObject = physicsEngine.AddPhysics(gameObjects[6], desc6);
+		sphereCollider = std::make_unique<SphereCollider>(5.0f, gameObjects[6].transform);
+		physicObject->SetCollider(sphereCollider);
 
 		// red cube
 		PhysicObjectDesc desc7;

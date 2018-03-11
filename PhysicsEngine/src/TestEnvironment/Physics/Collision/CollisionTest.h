@@ -14,10 +14,14 @@ public:
 		SPHERE_SPHERE
 	};
 
-	static bool TestSphereShere(const SphereCollider& sphereA, const SphereCollider& sphereB)
+	static bool SphereShere(const SphereCollider& sphereA, const SphereCollider& sphereB)
 	{
-		// TO-DO
-		return false;
+		// squared distance between centers by using the dot product
+		auto fromAtoB = sphereA.transform.position - sphereB.transform.position;
+		float distanceSq = glm::dot(fromAtoB, fromAtoB);
+
+		float radiusSum = sphereA.radius + sphereB.radius;
+		return distanceSq <= radiusSum * radiusSum;
 	}
 };
 

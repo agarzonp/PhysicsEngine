@@ -9,16 +9,23 @@
 
 class PhysicObject : public IPhysicObject
 {
+	// game object
 	GameObject* gameObject {nullptr};
 
+	// mass
 	float mass {0.0f};
 	float inverseMass {0.0f};
 
+	// position, velocity and acceleration
 	MathGeom::Vector3 position;
 	MathGeom::Vector3 velocity;
 	MathGeom::Vector3 acceleration;
 	
+	// accumulated forces
 	MathGeom::Vector3 accumulatedForces;
+
+	// collider
+	std::unique_ptr<Collider> collider;
 
 public:
 
@@ -45,6 +52,18 @@ public:
 	{
 		return mass;
 	}
+
+	// Add collider
+	void AddCollider(std::unique_ptr<Collider>& collider) final
+	{
+		this->collider = std::move(collider);
+	}
+
+	// Has collider
+	bool HasCollider() const { return collider != nullptr; }
+
+	// Get collider
+	const Collider& GetCollider() const { return *collider.get(); }
 
 	// Integrate
 	void Integrate(float deltaTime)

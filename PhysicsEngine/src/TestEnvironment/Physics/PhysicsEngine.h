@@ -5,6 +5,7 @@
 
 #include "../GameObject.h"
 
+#include "Collision/CollisionDetector.h"
 #include "Forces/Forces.h"
 #include "PhysicsObject/PhysicObjectDesc.h"
 #include "PhysicsObject/Particle.h"
@@ -24,6 +25,9 @@ class PhysicsEngine
 	using ForcesMapEntrySecond = std::vector<std::unique_ptr<IForce>>;
 	using ForcesMap = std::map<ForcesMapEntryFirst, ForcesMapEntrySecond>;
 	ForcesMap forcesMap;
+
+	// Collision detector
+	CollisionDetector collisionDetector;
 
 public:
 
@@ -65,8 +69,11 @@ public:
 		// add forces
 		AddForces();
 		
-		// Integrate
+		// integrate
 		Integrate(deltaTime);
+
+		// handle collision
+		HandleCollisions();
 	}
 
 private:
@@ -90,6 +97,22 @@ private:
 		for (auto physicObject : physicObjects)
 		{
 			physicObject->Integrate(deltaTime);
+		}
+	}
+
+	// Handle collisions
+	void HandleCollisions()
+	{
+		// TO-DO: replace brute force approach by a broad phase collision detection using spatial partitioning techniques
+		for (size_t i = 0; i < physicObjects.size() - 1; i++)
+		{
+			for (size_t j = i + 1; j < physicObjects.size(); j++)
+			{
+				if (collisionDetector.IsCollision(*physicObjects[i], *physicObjects[j]))
+				{
+					printf("Collision!");
+				}
+			}
 		}
 	}
 

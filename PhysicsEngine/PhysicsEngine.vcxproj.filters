@@ -43,6 +43,12 @@
     <Filter Include="Source Files\TestEnvironment\Render\Meshes">
       <UniqueIdentifier>{6df51e20-56c2-4ff3-956e-8608e01532f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\TestEnvironment\Physics\Collision">
+      <UniqueIdentifier>{05474620-51dd-4dd3-98f2-991576a4644d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\TestEnvironment\Physics\Collision\Colliders">
+      <UniqueIdentifier>{bc7b535d-9e9a-47b9-bd62-81718daaf540}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\Shaders\basic.frag">
@@ -115,6 +121,18 @@
     </ClInclude>
     <ClInclude Include="src\TestEnvironment\Render\SphereRenderable.h">
       <Filter>Source Files\TestEnvironment\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Physics\Collision\CollisionDetector.h">
+      <Filter>Source Files\TestEnvironment\Physics\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Physics\Collision\Colliders\Collider.h">
+      <Filter>Source Files\TestEnvironment\Physics\Collision\Colliders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Physics\Collision\CollisionTest.h">
+      <Filter>Source Files\TestEnvironment\Physics\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Physics\Collision\Colliders\SphereCollider.h">
+      <Filter>Source Files\TestEnvironment\Physics\Collision\Colliders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

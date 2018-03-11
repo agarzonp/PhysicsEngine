@@ -15,6 +15,8 @@ struct PhysicObjectDesc
 	MathGeom::Vector3 position;
 	MathGeom::Vector3 velocity;
 	MathGeom::Vector3 acceleration;
+
+	bool isAffectedByGravity{ true };
 };
 
 #endif // !PHYSIC_OBJECT_DESC_H

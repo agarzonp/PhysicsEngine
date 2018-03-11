@@ -17,6 +17,7 @@ class PhysicsEngine
 	PhysicObjects physicObjects;
 
 	// particles
+	static const int MAX_PARTICLE_OBJECTS = 100;
 	using Particles = std::vector<Particle>;
 	Particles particles;
 
@@ -31,6 +32,12 @@ class PhysicsEngine
 
 public:
 
+	// Init
+	void Init()
+	{
+		particles.reserve(MAX_PARTICLE_OBJECTS);
+	}
+
 	// Add physic to the game object
 	IPhysicObject* AddPhysics(GameObject& object, const PhysicObjectDesc& desc)
 	{
@@ -38,8 +45,12 @@ public:
 		{
 			case PhysicObjectType::PARTICLE:
 			{
-				particles.emplace_back(Particle(object, desc));
-				physicObjects.emplace_back(&particles.back());
+				assert(particles.size() < MAX_PARTICLE_OBJECTS);
+				if (particles.size() < MAX_PARTICLE_OBJECTS)
+				{
+					particles.emplace_back(Particle(object, desc));
+					physicObjects.emplace_back(&particles.back());
+				}
 				break;
 			}
 			default:
@@ -49,16 +60,15 @@ public:
 			}
 		}
 
-		// add gravity force
-		auto forcesMapEntry = forcesMap.find(physicObjects.back());
-		if (forcesMapEntry == forcesMap.end())
+		// register gravity force
+		if (desc.isAffectedByGravity)
 		{
-			forcesMap.insert(std::pair<ForcesMapEntryFirst, ForcesMapEntrySecond>(physicObjects.back(), ForcesMapEntrySecond()));
-			forcesMapEntry = forcesMap.find(physicObjects.back());
+			std::unique_ptr<IForce> gravityForce = std::make_unique<GravityForce>(MathGeom::Vector3(0.0f, -9.8f, 0.0f));
+			RegisterForce(physicObjects.back(), gravityForce);
 		}
 		
-		forcesMapEntry->second.emplace_back(std::make_unique<GravityForce>(MathGeom::Vector3(0.0f, -9.8f, 0.0f)));
-		
+		// attach the physics object to the game object
+		object.SetPhysicObject(physicObjects.back());
 
 		return physicObjects.back();
 	}
@@ -66,6 +76,12 @@ public:
 	// Update
 	void Update(float deltaTime)
 	{
+		if (physicObjects.size() == 0)
+		{
+			// nothing to update
+			return;
+		}
+
 		// add forces
 		AddForces();
 		
@@ -77,6 +93,19 @@ public:
 	}
 
 private:
+
+	// Register force
+	void RegisterForce(PhysicObject* physicObject, std::unique_ptr<IForce>& force)
+	{
+		auto forcesMapEntry = forcesMap.find(physicObject);
+		if (forcesMapEntry == forcesMap.end())
+		{
+			forcesMap.insert(std::pair<ForcesMapEntryFirst, ForcesMapEntrySecond>(physicObject, ForcesMapEntrySecond()));
+			forcesMapEntry = forcesMap.find(physicObject);
+		}
+
+		forcesMapEntry->second.emplace_back(std::move(force));
+	}
 
 	// Add forces
 	void AddForces()

@@ -138,6 +138,14 @@ protected:
 
 		gameObjects.emplace_back(gameObject);
 
+		gameObject.transform.position = glm::vec3(25.0f, 5.5f, 40.0f);
+		gameObject.transform.rotation = glm::vec3(0.5f, 0.5f, 0.0f);
+		gameObject.transform.scale = glm::vec3(1.0f, 1.0f, 1.0f);
+		gameObject.SetRenderable(std::shared_ptr<Renderable>(static_cast<Renderable*>(new SphereRenderable(5.0f, &sphereMesh, shader, glm::vec4(0.0f, 0.3f, 0.0f, 1.0f)))));
+		gameObject.SetVisible(true);
+
+		gameObjects.emplace_back(gameObject);
+
 		// red cube
 
 		gameObject.transform.position = glm::vec3(25.0f, 2.5f, 40.0f);
@@ -151,14 +159,35 @@ protected:
 
 	void InitPhysics()
 	{
-		PhysicObjectDesc desc;
-		desc.type = PhysicObjectType::PARTICLE;
-		desc.mass = 10.0f;
-		desc.velocity = MathGeom::Vector3(-2.0f, 0.0f, 0.0f);
-		desc.acceleration = MathGeom::Vector3(-10.0f, 0.0f, 0.0f);
+		physicsEngine.Init();
 
-		auto physicObject = physicsEngine.AddPhysics(gameObjects[6], desc);
-		gameObjects[6].SetPhysicObject(physicObject);
+		// green sphere
+		PhysicObjectDesc desc5;
+		desc5.type = PhysicObjectType::PARTICLE;
+		desc5.mass = 10.0f;
+		desc5.velocity = MathGeom::Vector3(2.0f, 0.0f, 0.0f);
+		desc5.acceleration = MathGeom::Vector3(10.0f, 0.0f, 0.0f);
+		desc5.isAffectedByGravity = false;
+
+		physicsEngine.AddPhysics(gameObjects[5], desc5);
+
+		PhysicObjectDesc desc6;
+		desc6.type = PhysicObjectType::PARTICLE;
+		desc6.mass = 10.0f;
+		desc6.velocity = MathGeom::Vector3(-2.0f, 0.0f, 0.0f);
+		desc6.acceleration = MathGeom::Vector3(-10.0f, 0.0f, 0.0f);
+		desc6.isAffectedByGravity = false;
+
+		physicsEngine.AddPhysics(gameObjects[6], desc6);
+
+		// red cube
+		PhysicObjectDesc desc7;
+		desc7.type = PhysicObjectType::PARTICLE;
+		desc7.mass = 10.0f;
+		desc7.velocity = MathGeom::Vector3(-2.0f, 0.0f, 0.0f);
+		desc7.acceleration = MathGeom::Vector3(-10.0f, 0.0f, 0.0f);
+
+		physicsEngine.AddPhysics(gameObjects[7], desc7);
 	}
 
 	void Terminate()

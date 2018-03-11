@@ -28,6 +28,8 @@ public:
 	{
 	}
 
+	virtual ~Renderable(){}
+
 	// Set visible
 	void SetVisible(bool visible) { isVisible = visible; }
 

@@ -33,8 +33,8 @@ public:
 	// Get Type
 	ColliderType GetType() const { return type; }
 
-	// Set position
-	void SetPosition(MathGeom::Vector3& pos) { transform.position = pos; }
+	// Set transform
+	void SetTransform(const Transform& transform_) { transform = transform_; }
 };
 
 #endif // !COLLIDER_H

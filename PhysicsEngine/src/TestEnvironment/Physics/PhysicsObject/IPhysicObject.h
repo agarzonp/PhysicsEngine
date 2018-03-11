@@ -15,6 +15,9 @@ public:
 	// Mass
 	virtual float Mass() = 0;
 
+	// Set Transform
+	virtual void SetTransform(const Transform& transform) = 0;
+
 	// Set collider
 	virtual void SetCollider(std::unique_ptr<Collider>& collider) = 0;
 };

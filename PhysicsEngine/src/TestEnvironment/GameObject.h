@@ -24,7 +24,15 @@ public:
 public:
 
 	// Set position
-	void SetPosition(MathGeom::Vector3& pos) {transform.position = pos; }
+	void SetPosition(MathGeom::Vector3& pos) 
+	{
+		transform.position = pos;
+
+		if (physicObject)
+		{
+			physicObject->SetTransform(transform);
+		}
+	}
 
 	// Set renderable
 	void SetRenderable(std::shared_ptr<Renderable>& renderable_) { renderable = renderable_; }

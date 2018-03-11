@@ -53,6 +53,15 @@ public:
 		return mass;
 	}
 
+	// Set transform
+	void SetTransform(const Transform& transform) final
+	{
+		if (collider)
+		{
+			collider->SetTransform(transform);
+		}
+	}
+
 	// Set collider
 	void SetCollider(std::unique_ptr<Collider>& collider) final
 	{
@@ -81,14 +90,10 @@ public:
 		position += velocity*deltaTime;
 
 		// set the new position to the game object
+		// If the game object has a physics object attached, the transform of the collider will be updated too
+		// So we make sure that if the object movement is not handled by the integrator, the collider is still updated correctly
 		gameObject->SetPosition(position);
 
-		// set the new position of the collider
-		if (collider)
-		{
-			collider->SetPosition(position);
-		}
-		
 		// reset accumulated forces
 		accumulatedForces = MathGeom::Vector3();
 	}

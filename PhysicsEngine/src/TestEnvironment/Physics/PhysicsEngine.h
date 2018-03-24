@@ -107,6 +107,12 @@ private:
 
 			switch (colliderDesc->type)
 			{
+			case ColliderType::AABB:
+			{
+				MathGeom::Vector3 halfSize = static_cast<AABBColliderDesc*>(colliderDesc.get())->halfSize;
+				collider = std::make_unique<AABBCollider>(halfSize, colliderDesc->transform);
+				break;
+			}
 			case ColliderType::SPHERE:
 			{
 				float radius = static_cast<SphereColliderDesc*>(colliderDesc.get())->radius;

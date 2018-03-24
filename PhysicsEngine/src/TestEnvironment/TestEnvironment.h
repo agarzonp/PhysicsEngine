@@ -167,7 +167,8 @@ protected:
 		desc5.mass = 10.0f;
 		desc5.velocity = MathGeom::Vector3(2.0f, 0.0f, 0.0f);
 		desc5.acceleration = MathGeom::Vector3(10.0f, 0.0f, 0.0f);
-		desc5.colliderDesc = std::make_unique<SphereColliderDesc>(3.0f, gameObjects[5].transform);
+		//desc5.colliderDesc = std::make_unique<SphereColliderDesc>(3.0f, gameObjects[5].transform);
+		desc5.colliderDesc = std::make_unique<AABBColliderDesc>(MathGeom::Vector3(1.5f, 1.5f, 1.5f), gameObjects[5].transform);
 		desc5.isAffectedByGravity = false;
 
 		physicsEngine.AddPhysics(gameObjects[5], desc5);
@@ -177,7 +178,8 @@ protected:
 		desc6.mass = 10.0f;
 		desc6.velocity = MathGeom::Vector3(-2.0f, 0.0f, 0.0f);
 		desc6.acceleration = MathGeom::Vector3(-10.0f, 0.0f, 0.0f);
-		desc6.colliderDesc = std::make_unique<SphereColliderDesc>(5.0f, gameObjects[6].transform);
+		//desc6.colliderDesc = std::make_unique<SphereColliderDesc>(5.0f, gameObjects[6].transform);
+		desc6.colliderDesc = std::make_unique<AABBColliderDesc>(MathGeom::Vector3(2.5f, 2.5f, 2.5f), gameObjects[6].transform);
 		desc6.isAffectedByGravity = false;
 
 		physicsEngine.AddPhysics(gameObjects[6], desc6);

@@ -137,6 +137,9 @@
     <ClInclude Include="src\TestEnvironment\Physics\Collision\Colliders\ColliderDesc.h">
       <Filter>Source Files\TestEnvironment\Physics\Collision\Colliders</Filter>
     </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Physics\Collision\Colliders\AABBCollider.h">
+      <Filter>Source Files\TestEnvironment\Physics\Collision\Colliders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">

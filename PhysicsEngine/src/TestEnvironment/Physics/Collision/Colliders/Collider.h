@@ -4,7 +4,8 @@
 enum class ColliderType
 {
 	INVALID,
-	SPHERE
+	SPHERE,
+	AABB
 };
 
 class Collider

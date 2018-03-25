@@ -113,6 +113,16 @@ private:
 				collider = std::make_unique<AABBCollider>(halfSize, colliderDesc->transform);
 				break;
 			}
+			case ColliderType::PLANE:
+			{
+				MathGeom::Vector3 pointA = static_cast<PlaneColliderDesc*>(colliderDesc.get())->pointA;
+				MathGeom::Vector3 pointB = static_cast<PlaneColliderDesc*>(colliderDesc.get())->pointB;
+				MathGeom::Vector3 pointC = static_cast<PlaneColliderDesc*>(colliderDesc.get())->pointC;
+
+				collider = std::make_unique<PlaneCollider>(pointA, pointB, pointC, colliderDesc->transform);
+
+				break;
+			}
 			case ColliderType::SPHERE:
 			{
 				float radius = static_cast<SphereColliderDesc*>(colliderDesc.get())->radius;

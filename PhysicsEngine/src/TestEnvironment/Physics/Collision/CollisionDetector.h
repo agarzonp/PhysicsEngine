@@ -31,8 +31,13 @@ private:
 	{
 		switch (GetCollisionTestType(colliderA, colliderB))
 		{
+		case CollisionTest::Type::NONE:
+			return false;
+
 		case CollisionTest::Type::AABB_AABB:
 			return CollisionTest::AABB_AABB(colliderA, colliderB);
+		case CollisionTest::Type::AABB_PLANE:
+			return CollisionTest::AABB_Plane(colliderA, colliderB);
 		case CollisionTest::Type::AABB_SPHERE:
 			return CollisionTest::AABB_Sphere(colliderA, colliderB);
 		case CollisionTest::Type::SPHERE_SPHERE:
@@ -64,9 +69,34 @@ private:
 					testType = CollisionTest::Type::AABB_AABB;
 					break;
 				}
+				case ColliderType::PLANE:
+				{
+					testType = CollisionTest::Type::AABB_PLANE;
+					break;
+				}
 				case ColliderType::SPHERE:
 				{
 					testType = CollisionTest::Type::AABB_SPHERE;
+					break;
+				}
+				default:
+					assert(false);
+					break;
+				}
+				break;
+			}
+			case ColliderType::PLANE:
+			{
+				switch (colliderTypeB)
+				{
+				case ColliderType::AABB:
+				{
+					testType = CollisionTest::Type::AABB_PLANE;
+					break;
+				}
+				case ColliderType::PLANE:
+				{
+					testType = CollisionTest::Type::NONE;
 					break;
 				}
 				default:

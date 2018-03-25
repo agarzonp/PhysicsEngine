@@ -26,6 +26,22 @@ struct AABBColliderDesc : public ColliderDesc
 	}
 };
 
+// Plane collider desc
+struct PlaneColliderDesc : public ColliderDesc
+{
+	MathGeom::Vector3 pointA;
+	MathGeom::Vector3 pointB;
+	MathGeom::Vector3 pointC;
+
+	PlaneColliderDesc(MathGeom::Vector3& a, MathGeom::Vector3& b, MathGeom::Vector3& c, Transform& transform)
+		: ColliderDesc(ColliderType::PLANE, transform)
+		, pointA(a)
+		, pointB(b)
+		, pointC(c)
+	{
+	}
+};
+
 // Sphere collider desc
 struct SphereColliderDesc : public ColliderDesc
 {

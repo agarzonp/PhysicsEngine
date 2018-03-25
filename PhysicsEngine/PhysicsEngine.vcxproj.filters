@@ -140,6 +140,9 @@
     <ClInclude Include="src\TestEnvironment\Physics\Collision\Colliders\AABBCollider.h">
       <Filter>Source Files\TestEnvironment\Physics\Collision\Colliders</Filter>
     </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Physics\Collision\ClosestPointOn.h">
+      <Filter>Source Files\TestEnvironment\Physics\Collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">

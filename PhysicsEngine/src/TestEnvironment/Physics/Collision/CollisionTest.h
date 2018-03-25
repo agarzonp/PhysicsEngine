@@ -6,6 +6,8 @@
 #include "Colliders/AABBCollider.h"
 #include "Colliders/SphereCollider.h"
 
+#include "ClosestPointOn.h"
+
 class CollisionTest
 {
 public:
@@ -14,6 +16,7 @@ public:
 	{
 		NONE,
 		AABB_AABB,
+		AABB_SPHERE,
 		SPHERE_SPHERE,
 	};
 
@@ -34,7 +37,25 @@ public:
 		return true;
 	}
 
-	static bool Sphere_Shere(const Collider& colliderA, const Collider& colliderB)
+	static bool AABB_Sphere(const Collider& colliderA, const Collider& colliderB)
+	{
+		const AABBCollider& box = colliderA.GetType() == ColliderType::AABB ? *static_cast<const AABBCollider*>(&colliderA) 
+																			: *static_cast<const AABBCollider*>(&colliderB);
+
+		const SphereCollider& sphere = colliderA.GetType() == ColliderType::SPHERE ? *static_cast<const SphereCollider*>(&colliderA) 
+																				   : *static_cast<const SphereCollider*>(&colliderB);
+
+		// closest point on AABB from sphere center
+		auto& sphereCenter = sphere.transform.position;
+		auto& closestPointOnAABB = ClosestPointOn::AABB(sphereCenter, box);
+
+		// intersection if the squared distance between them is less than sphere squared radius
+		auto fromSphereToAABB = closestPointOnAABB - sphereCenter;
+		float distanceSq = fromSphereToAABB.x * fromSphereToAABB.x + fromSphereToAABB.y * fromSphereToAABB.y + fromSphereToAABB.z * fromSphereToAABB.z;
+		return distanceSq <= sphere.radius * sphere.radius;
+	}
+
+	static bool Sphere_Sphere(const Collider& colliderA, const Collider& colliderB)
 	{
 		const SphereCollider& sphereA = *static_cast<const SphereCollider*>(&colliderA); 
 		const SphereCollider& sphereB = *static_cast<const SphereCollider*>(&colliderB);

@@ -8,6 +8,7 @@
 #include "Colliders/SphereCollider.h"
 
 #include "ClosestPointOn.h"
+#include "DistanceTo.h"
 
 class CollisionTest
 {
@@ -42,9 +43,24 @@ public:
 
 	static bool AABB_Plane(const Collider& colliderA, const Collider& colliderB)
 	{
-		// TO-DO
+		const AABBCollider& box = colliderA.GetType() == ColliderType::AABB ? *static_cast<const AABBCollider*>(&colliderA)
+			: *static_cast<const AABBCollider*>(&colliderB);
 
-		return false;
+		const PlaneCollider& plane = colliderA.GetType() == ColliderType::PLANE ? *static_cast<const PlaneCollider*>(&colliderA)
+			: *static_cast<const PlaneCollider*>(&colliderB);
+
+		auto& bCenter = box.transform.position; // box center
+		auto& bExtent = box.halfSize; // box extents
+		auto& pNormal = plane.normal;
+
+		// projection interval of AABB onto separating axis L(t) = boxCenter  + t*plane,normal
+		float r = bExtent.x * std::fabsf(pNormal.x) + bExtent.y * std::fabsf(pNormal.y) + bExtent.z * std::fabsf(pNormal.z);
+
+		// distance from bCenter to plane
+		float distance = DistanceTo::Plane(bCenter, plane);
+
+		// intersection when the distance is in [-r, r]
+		return std::fabs(distance) <= r;
 	}
 
 	static bool AABB_Sphere(const Collider& colliderA, const Collider& colliderB)
@@ -75,8 +91,8 @@ public:
 
 		// All points in a Plane satisfy dot(plane.normal, p) = plane.d
 		// Therefore, if p = sphere.center there will be an intersection if the distance from the plane is less than the sphere radius
-		float distance = glm::dot(sphere.transform.position, plane.normal) - plane.d;
-		return distance <= sphere.radius;
+		float distance = DistanceTo::Plane(sphere.transform.position, plane);
+		return std::fabsf(distance) < sphere.radius;
 	}
 
 	static bool Sphere_Sphere(const Collider& colliderA, const Collider& colliderB)

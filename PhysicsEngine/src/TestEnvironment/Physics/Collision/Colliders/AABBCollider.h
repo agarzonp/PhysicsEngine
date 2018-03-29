@@ -17,6 +17,17 @@ public:
 		, halfSize(halfSize_)
 	{
 	}
+
+	// Debug Render
+	void DebugRender(const glm::mat4& viewProjection) final
+	{
+		Transform renderTransform = transform;
+		renderTransform.scale.x = transform.scale.x * halfSize.x * 2.0f;
+		renderTransform.scale.y = transform.scale.y * halfSize.y * 2.0f;
+		renderTransform.scale.z = transform.scale.z * halfSize.z * 2.0f;
+
+		RenderUtils::RenderCube(viewProjection, renderTransform, 0xFFFFFF);
+	}
 };
 
 #endif // !AABB_COLLIDER_H

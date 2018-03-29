@@ -157,6 +157,7 @@ xcopy /Y /E "$(SolutionDir)common\lib\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="src\TestEnvironment\Render\Meshes\Mesh.h" />
     <ClInclude Include="src\TestEnvironment\Render\Meshes\SphereMesh.h" />
     <ClInclude Include="src\TestEnvironment\Render\Renderable.h" />
+    <ClInclude Include="src\TestEnvironment\Render\RenderUtils.h" />
     <ClInclude Include="src\TestEnvironment\Render\SphereRenderable.h" />
     <ClInclude Include="src\TestEnvironment\TestEnvironment.h" />
     <ClInclude Include="src\TestEnvironment\Transform.h" />

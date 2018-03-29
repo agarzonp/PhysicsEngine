@@ -21,6 +21,17 @@ public:
 		ComputePlane(pointA, pointB, pointC);
 	}
 
+	// Debug Render
+	void DebugRender(const glm::mat4& viewProjection) final
+	{
+		Transform renderTransform = transform;
+		renderTransform.scale.x = 1000.0f;
+		renderTransform.scale.y = 0.001f;
+		renderTransform.scale.z = 1000.0f;
+
+		RenderUtils::RenderCube(viewProjection, renderTransform, 0xFFFFFF);
+	}
+
 private:
 
 	void ComputePlane(MathGeom::Vector3& pointA, MathGeom::Vector3& pointB, MathGeom::Vector3& pointC)

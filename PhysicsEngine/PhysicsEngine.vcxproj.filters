@@ -149,6 +149,9 @@
     <ClInclude Include="src\TestEnvironment\Physics\Collision\DistanceTo.h">
       <Filter>Source Files\TestEnvironment\Physics\Collision</Filter>
     </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Render\RenderUtils.h">
+      <Filter>Source Files\TestEnvironment\Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">

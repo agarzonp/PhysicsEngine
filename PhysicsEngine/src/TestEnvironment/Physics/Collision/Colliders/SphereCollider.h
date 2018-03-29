@@ -17,6 +17,12 @@ public:
 		, radius(radius_)
 	{
 	}
+
+	// Debug Render
+	void DebugRender(const glm::mat4& viewProjection) final
+	{
+		RenderUtils::RenderSphere(viewProjection, radius + 0.01f, transform, 0xFFFFFF);
+	}
 };
 
 #endif // !SPHERE_COLLIDER_H

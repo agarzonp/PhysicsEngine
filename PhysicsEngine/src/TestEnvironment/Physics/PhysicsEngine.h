@@ -116,8 +116,7 @@ private:
 			{
 			case ColliderType::AABB:
 			{
-				MathGeom::Vector3 halfSize = static_cast<AABBColliderDesc*>(colliderDesc.get())->halfSize;
-				collider = std::make_unique<AABBCollider>(halfSize, colliderDesc->transform);
+				collider = std::make_unique<AABBCollider>(colliderDesc->transform);
 				break;
 			}
 			case ColliderType::PLANE:
@@ -132,8 +131,7 @@ private:
 			}
 			case ColliderType::SPHERE:
 			{
-				float radius = static_cast<SphereColliderDesc*>(colliderDesc.get())->radius;
-				collider = std::make_unique<SphereCollider>(radius, colliderDesc->transform);
+				collider = std::make_unique<SphereCollider>(colliderDesc->transform);
 				break;
 			}
 			default:

@@ -12,21 +12,19 @@ public:
 
 	// Constructor
 	AABBCollider() = delete;
-	AABBCollider(MathGeom::Vector3& halfSize_, Transform& transform)
+	AABBCollider(Transform& transform)
 		: Collider(ColliderType::AABB, transform)
-		, halfSize(halfSize_)
 	{
+		halfSize = transform.scale;
 	}
 
 	// Debug Render
 	void DebugRender(const glm::mat4& viewProjection) final
 	{
-		Transform renderTransform = transform;
-		renderTransform.scale.x = transform.scale.x * halfSize.x * 2.0f;
-		renderTransform.scale.y = transform.scale.y * halfSize.y * 2.0f;
-		renderTransform.scale.z = transform.scale.z * halfSize.z * 2.0f;
+		Transform AABBTransform = transform;
+		AABBTransform.scale = halfSize * 1.001f;
 
-		RenderUtils::RenderCube(viewProjection, renderTransform, 0xFFFFFF);
+		RenderUtils::RenderCube(viewProjection, AABBTransform, 0xFFFFFF);
 	}
 };
 

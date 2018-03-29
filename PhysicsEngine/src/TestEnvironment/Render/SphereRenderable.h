@@ -23,10 +23,11 @@ protected:
 
 	glm::mat4 ModelMatrix(const Transform& transform) override
 	{		
-		Transform scaled(transform);
-		scaled.scale = radius * transform.scale;
+		Transform sphereTransfom;
+		sphereTransfom.position = transform.position;
+		sphereTransfom.scale *= radius;
 
-		return Renderable::ModelMatrix(scaled);
+		return Renderable::ModelMatrix(sphereTransfom);
 	}
 };
 

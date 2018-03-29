@@ -4,6 +4,7 @@
 #include "Colliders/Collider.h"
 
 #include "Colliders/AABBCollider.h"
+#include "Colliders/PlaneCollider.h"
 #include "Colliders/SphereCollider.h"
 
 #include "ClosestPointOn.h"
@@ -16,7 +17,9 @@ public:
 	{
 		NONE,
 		AABB_AABB,
+		AABB_PLANE,
 		AABB_SPHERE,
+		SPHERE_PLANE,
 		SPHERE_SPHERE,
 	};
 
@@ -37,6 +40,13 @@ public:
 		return true;
 	}
 
+	static bool AABB_Plane(const Collider& colliderA, const Collider& colliderB)
+	{
+		// TO-DO
+
+		return false;
+	}
+
 	static bool AABB_Sphere(const Collider& colliderA, const Collider& colliderB)
 	{
 		const AABBCollider& box = colliderA.GetType() == ColliderType::AABB ? *static_cast<const AABBCollider*>(&colliderA) 
@@ -53,6 +63,20 @@ public:
 		auto fromSphereToAABB = closestPointOnAABB - sphereCenter;
 		float distanceSq = fromSphereToAABB.x * fromSphereToAABB.x + fromSphereToAABB.y * fromSphereToAABB.y + fromSphereToAABB.z * fromSphereToAABB.z;
 		return distanceSq <= sphere.radius * sphere.radius;
+	}
+
+	static bool Sphere_Plane(const Collider& colliderA, const Collider& colliderB)
+	{
+		const SphereCollider& sphere= colliderA.GetType() == ColliderType::SPHERE ? *static_cast<const SphereCollider*>(&colliderA)
+																				  : *static_cast<const SphereCollider*>(&colliderB);
+
+		const PlaneCollider& plane = colliderA.GetType() == ColliderType::PLANE ? *static_cast<const PlaneCollider*>(&colliderA)
+																				: *static_cast<const PlaneCollider*>(&colliderB);
+
+		// All points in a Plane satisfy dot(plane.normal, p) = plane.d
+		// Therefore, if p = sphere.center there will be an intersection if the distance from the plane is less than the sphere radius
+		float distance = glm::dot(sphere.transform.position, plane.normal) - plane.d;
+		return distance <= sphere.radius;
 	}
 
 	static bool Sphere_Sphere(const Collider& colliderA, const Collider& colliderB)

@@ -40,6 +40,8 @@ private:
 			return CollisionTest::AABB_Plane(colliderA, colliderB);
 		case CollisionTest::Type::AABB_SPHERE:
 			return CollisionTest::AABB_Sphere(colliderA, colliderB);
+		case CollisionTest::Type::SPHERE_PLANE:
+			return CollisionTest::Sphere_Plane(colliderA, colliderB);
 		case CollisionTest::Type::SPHERE_SPHERE:
 			return CollisionTest::Sphere_Sphere(colliderA, colliderB);
 		default:
@@ -99,6 +101,11 @@ private:
 					testType = CollisionTest::Type::NONE;
 					break;
 				}
+				case ColliderType::SPHERE:
+				{
+					testType = CollisionTest::Type::SPHERE_PLANE;
+					break;
+				}
 				default:
 					assert(false);
 					break;
@@ -112,6 +119,11 @@ private:
 				case ColliderType::AABB:
 				{
 					testType = CollisionTest::Type::AABB_SPHERE;
+					break;
+				}
+				case ColliderType::PLANE:
+				{
+					testType = CollisionTest::Type::SPHERE_PLANE;
 					break;
 				}
 				case ColliderType::SPHERE:

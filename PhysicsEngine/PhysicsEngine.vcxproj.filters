@@ -152,6 +152,12 @@
     <ClInclude Include="src\TestEnvironment\Render\RenderUtils.h">
       <Filter>Source Files\TestEnvironment\Render</Filter>
     </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Physics\Collision\ContactData.h">
+      <Filter>Source Files\TestEnvironment\Physics\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Physics\Collision\CollisionResolver.h">
+      <Filter>Source Files\TestEnvironment\Physics\Collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">

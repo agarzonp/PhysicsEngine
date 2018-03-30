@@ -48,10 +48,8 @@ public:
 	}
 
 	// Mass getter
-	float Mass() final 
-	{
-		return mass;
-	}
+	float Mass() final { return mass; }
+	float InverseMass() { return inverseMass; }
 
 	// Set transform
 	void SetTransform(const Transform& transform) final
@@ -73,6 +71,10 @@ public:
 
 	// Get collider
 	const Collider& GetCollider() const { return *collider.get(); }
+
+	// Velocity getter
+	const MathGeom::Vector3& Velocity() const { return velocity; }
+	MathGeom::Vector3& Velocity() { return velocity; }
 
 	// Integrate
 	void Integrate(float deltaTime)

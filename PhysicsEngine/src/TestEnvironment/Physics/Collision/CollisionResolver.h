@@ -68,20 +68,44 @@ private:
 	// Get Impulse
 	MathGeom::Vector3 GetImpulse(PhysicObject* objectA, PhysicObject* objectB, const MathGeom::Vector3& contactNormal, float deltaVelocity)
 	{
+		float impulseAmount = deltaVelocity / GetTotalInverseMass(objectA, objectB);
+		return contactNormal * impulseAmount;
+	}
+
+	// Get total inverse mass
+	float GetTotalInverseMass(PhysicObject* objectA, PhysicObject* objectB)
+	{
 		float totalInverseMass = objectA->InverseMass();
 		if (objectB)
 		{
 			totalInverseMass += objectB->InverseMass();
 		}
-
-		float impulseAmount = deltaVelocity / totalInverseMass;
-		return contactNormal * impulseAmount;
+		assert(totalInverseMass > 0);
+		return totalInverseMass;
 	}
 
 	// Resolve interpenetration
 	void ResolveInterpenetration(const ContactData& contact, float deltaTime)
 	{
-		// TO-DO
+		float penetration = contact.penetration;
+		if (penetration <= 0)
+		{
+			// no penetration at all
+			return;
+		}
+
+		PhysicObject* objectA = contact.objectA;
+		PhysicObject* objectB = contact.objectB;
+
+		// calculate positional change and apply it to each object
+		MathGeom::Vector3 displacement = contact.normal * (penetration / GetTotalInverseMass(objectA, objectB));
+		MathGeom::Vector3 positionChange = displacement * objectA->InverseMass();
+		objectA->SetPosition(objectA->Position() + positionChange);
+		if (objectB)
+		{
+			positionChange = -displacement * objectB->InverseMass(); // negative because separating in opposite direction
+			objectB->SetPosition(objectB->Position() + positionChange);
+		}
 	}
 
 };

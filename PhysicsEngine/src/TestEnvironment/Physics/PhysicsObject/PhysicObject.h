@@ -72,9 +72,21 @@ public:
 	// Get collider
 	const Collider& GetCollider() const { return *collider.get(); }
 
-	// Velocity getter
+	// Velocity getter/setter
 	const MathGeom::Vector3& Velocity() const { return velocity; }
 	MathGeom::Vector3& Velocity() { return velocity; }
+
+	// Position getter/setter
+	const MathGeom::Vector3& Position() const { return position; }
+	void SetPosition(const MathGeom::Vector3& pos)
+	{
+		position = pos;
+
+		// set the new position to the game object
+		// If the game object has a physics object attached, the transform of the collider will be updated too
+		// So we make sure that if the object movement is not handled by the integrator, the collider is still updated correctly
+		gameObject->SetPosition(position);
+	}
 
 	// Integrate
 	void Integrate(float deltaTime)
@@ -89,12 +101,8 @@ public:
 		velocity += (acceleration + accumulatedForces*inverseMass)*deltaTime;
 
 		// update position
-		position += velocity*deltaTime;
-
-		// set the new position to the game object
-		// If the game object has a physics object attached, the transform of the collider will be updated too
-		// So we make sure that if the object movement is not handled by the integrator, the collider is still updated correctly
-		gameObject->SetPosition(position);
+		auto newPosition = position + velocity*deltaTime;
+		SetPosition(newPosition);
 
 		// reset accumulated forces
 		accumulatedForces = MathGeom::Vector3();

@@ -10,7 +10,7 @@ class CollisionDetector
 public:
 
 	// IsCollision
-	bool IsCollision(const PhysicObject& objectA, const PhysicObject& objectB)
+	bool IsCollision(PhysicObject& objectA, PhysicObject& objectB, ContactData& outContact)
 	{
 		if (!objectA.HasCollider() || !objectB.HasCollider())
 		{
@@ -21,13 +21,29 @@ public:
 		const Collider& colliderA = objectA.GetCollider();
 		const Collider& colliderB = objectB.GetCollider();
 
-		return Test(colliderA, colliderB);
+		if (Test(colliderA, colliderB, outContact))
+		{
+			outContact.objectA = objectA.InverseMass() > 0 ? &objectA : &objectB;
+			outContact.objectB = outContact.objectA == &objectA ? &objectB : &objectA;
+
+			assert(outContact.objectA->InverseMass() > 0);
+
+			if (outContact.objectB->InverseMass() <= 0)
+			{
+				// contact resolution not needed for immovable object
+				outContact.objectB = nullptr;
+			}
+
+			return true;
+		}
+
+		return false;
 	}
 
 private:
 
 	// Test collision
-	bool Test(const Collider& colliderA, const Collider& colliderB)
+	bool Test(const Collider& colliderA, const Collider& colliderB, ContactData& outContact)
 	{
 		switch (GetCollisionTestType(colliderA, colliderB))
 		{
@@ -43,7 +59,7 @@ private:
 		case CollisionTest::Type::SPHERE_PLANE:
 			return CollisionTest::Sphere_Plane(colliderA, colliderB);
 		case CollisionTest::Type::SPHERE_SPHERE:
-			return CollisionTest::Sphere_Sphere(colliderA, colliderB);
+			return CollisionTest::Sphere_Sphere(colliderA, colliderB, outContact);
 		default:
 			assert(false);
 			break;

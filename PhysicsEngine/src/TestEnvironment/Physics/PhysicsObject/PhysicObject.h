@@ -49,7 +49,7 @@ public:
 
 	// Mass getter
 	float Mass() final { return mass; }
-	float InverseMass() { return inverseMass; }
+	float InverseMass() const { return inverseMass; }
 
 	// Set transform
 	void SetTransform(const Transform& transform) final

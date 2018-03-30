@@ -27,17 +27,16 @@ public:
 		{
 			for (size_t j = i + 1; j < objects.size(); j++)
 			{
-				// TO-DO: get contact data from collision detection
-				if (collisionDetector.IsCollision(*objects[i], *objects[j]))
+				ContactData contact;
+				if (collisionDetector.IsCollision(*objects[i], *objects[j], contact))
 				{
 					printf("Collision!\n");
+					assert(contact.objectA);
 
-					// Push contact data				
+					contacts.emplace_back(contact);
 				}
 			}
 		}
-
-
 
 		// Collision Resolution
 		collisionResolver.Resolve(contacts, deltaTime);

@@ -182,11 +182,11 @@ protected:
 		PhysicObjectDesc greenPhysicObject;
 		greenPhysicObject.type = PhysicObjectType::PARTICLE;
 		greenPhysicObject.mass = 10.0f;
-		greenPhysicObject.velocity = MathGeom::Vector3(0.0f, 0.0f, 0.0f);
-		greenPhysicObject.acceleration = MathGeom::Vector3(0.0f, 0.0f, 0.0f);
+		greenPhysicObject.velocity = MathGeom::Vector3(0.8f, 0.0f, 0.0f);
+		greenPhysicObject.acceleration = MathGeom::Vector3(0.8f, 0.0f, 0.0f);
 		greenPhysicObject.colliderDesc = std::make_unique<SphereColliderDesc>(gameObjects.back().transform);
 		//desc5.colliderDesc = std::make_unique<AABBColliderDesc>(gameObjects.back().transform);
-		greenPhysicObject.isAffectedByGravity = true;
+		greenPhysicObject.isAffectedByGravity = false;
 
 		physicsEngine.AddPhysics(gameObjects.back(), greenPhysicObject);
 
@@ -196,8 +196,8 @@ protected:
 		redObject.transform.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 		redObject.transform.scale = glm::vec3(3.0f, 3.0f, 3.0f);
 		sphereRadius = redObject.transform.scale.x;
-		//redObject.SetRenderable(std::shared_ptr<Renderable>(static_cast<Renderable*>(new SphereRenderable(sphereRadius, &sphereMesh, shader, glm::vec4(0.0f, 0.3f, 0.0f, 1.0f)))));
-		redObject.SetRenderable(std::make_shared<Renderable>(&cubeMesh, shader, glm::vec4(0.5f, 0.0f, 0.0f, 1.0f)));
+		redObject.SetRenderable(std::shared_ptr<Renderable>(static_cast<Renderable*>(new SphereRenderable(sphereRadius, &sphereMesh, shader, glm::vec4(0.0f, 0.3f, 0.0f, 1.0f)))));
+		//redObject.SetRenderable(std::make_shared<Renderable>(&cubeMesh, shader, glm::vec4(0.5f, 0.0f, 0.0f, 1.0f)));
 		redObject.SetVisible(true);
 
 		gameObjects.emplace_back(redObject);
@@ -207,8 +207,8 @@ protected:
 		redPhysicObject.mass = 10.0f;
 		redPhysicObject.velocity = MathGeom::Vector3(-0.8f, 0.0f, 0.0f);
 		redPhysicObject.acceleration = MathGeom::Vector3(-0.8f, 0.0f, 0.0f);
-		//redPhysicObject.colliderDesc = std::make_unique<SphereColliderDesc>(gameObjects.back().transform);
-		redPhysicObject.colliderDesc = std::make_unique<AABBColliderDesc>(gameObjects.back().transform);
+		redPhysicObject.colliderDesc = std::make_unique<SphereColliderDesc>(gameObjects.back().transform);
+		//redPhysicObject.colliderDesc = std::make_unique<AABBColliderDesc>(gameObjects.back().transform);
 		redPhysicObject.isAffectedByGravity = false;
 
 		physicsEngine.AddPhysics(gameObjects.back(), redPhysicObject);

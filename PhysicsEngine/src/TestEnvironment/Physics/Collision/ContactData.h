@@ -15,10 +15,11 @@ struct ContactData
 	MathGeom::Vector3 normal;
 
 	// coefficient of restitution (the speed at which the objects will separate after colliding)
-	float restitution;
+	float restitution{ 1.0f };
+
 
 	// depth of penetration in the direction of the contact normal
-	float penetration;
+	float penetration{ 0.0f };
 };
 
 using Contacts = std::vector<ContactData>;

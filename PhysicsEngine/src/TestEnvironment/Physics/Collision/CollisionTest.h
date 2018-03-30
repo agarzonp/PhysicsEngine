@@ -95,17 +95,26 @@ public:
 		return std::fabsf(distance) < sphere.radius;
 	}
 
-	static bool Sphere_Sphere(const Collider& colliderA, const Collider& colliderB)
+	static bool Sphere_Sphere(const Collider& colliderA, const Collider& colliderB, ContactData& outContact)
 	{
 		const SphereCollider& sphereA = *static_cast<const SphereCollider*>(&colliderA); 
 		const SphereCollider& sphereB = *static_cast<const SphereCollider*>(&colliderB);
 		
 		// squared distance between centers by using the dot product
-		auto fromAtoB = sphereA.transform.position - sphereB.transform.position;
-		float distanceSq = glm::dot(fromAtoB, fromAtoB);
+		auto fromBtoA = sphereA.transform.position - sphereB.transform.position;
+		float distanceSq = glm::dot(fromBtoA, fromBtoA);
 
 		float radiusSum = sphereA.radius + sphereB.radius;
-		return distanceSq <= radiusSum * radiusSum;
+
+		bool isCollision = distanceSq <= radiusSum * radiusSum;
+		if (isCollision)
+		{
+			// fill contact data
+			outContact.normal = glm::normalize(fromBtoA);
+			outContact.penetration = sphereA.radius + sphereB.radius - glm::length(fromBtoA);
+		}
+
+		return isCollision;
 	}
 };
 

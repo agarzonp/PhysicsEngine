@@ -5,17 +5,15 @@
 
 #include "../GameObject.h"
 
-#include "Collision/ContactData.h"
-#include "Collision/CollisionDetector.h"
-#include "Collision/CollisionResolver.h"
 #include "Forces/Forces.h"
 #include "PhysicsObject/PhysicObjectDesc.h"
 #include "PhysicsObject/Particle.h"
 
+#include "CollisionManager.h"
+
 class PhysicsEngine
 {
 	// physic objects
-	using PhysicObjects = std::vector<PhysicObject*>;
 	PhysicObjects physicObjects;
 
 	// particles
@@ -29,11 +27,8 @@ class PhysicsEngine
 	using ForcesMap = std::map<ForcesMapEntryFirst, ForcesMapEntrySecond>;
 	ForcesMap forcesMap;
 
-	// Collision detector
-	CollisionDetector collisionDetector;
-
-	// Collision resolver
-	CollisionResolver collisionResolver;
+	// Collision manager
+	CollisionManager collisionManager;
 
 public:
 
@@ -97,7 +92,7 @@ public:
 		Integrate(deltaTime);
 
 		// handle collision
-		HandleCollisions(deltaTime);
+		collisionManager.Update(physicObjects, deltaTime);
 	}
 
 	// Debug render
@@ -183,35 +178,6 @@ private:
 		}
 	}
 
-	// Handle collisions
-	void HandleCollisions(float deltaTime)
-	{
-		std::vector<ContactData> contacts;
-
-		// Collision Detection
-		// TO-DO: replace brute force approach by a broad phase collision detection using spatial partitioning techniques
-		for (size_t i = 0; i < physicObjects.size() - 1; i++)
-		{
-			for (size_t j = i + 1; j < physicObjects.size(); j++)
-			{
-				// TO-DO: get contact data from collision detection
-				if (collisionDetector.IsCollision(*physicObjects[i], *physicObjects[j]))
-				{
-					printf("Collision!\n");
-
-					// Push contact data				
-				}
-			}
-		}
-
-		// Collision Resolution
-		for (auto& contact : contacts)
-		{
-			collisionResolver.Resolve(contact, deltaTime);
-		}
-
-		contacts.clear();
-	}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////

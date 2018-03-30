@@ -119,5 +119,7 @@ public:
 
 };
 
+using PhysicObjects = std::vector<PhysicObject*>;
+
 #endif // !PHYSIC_OBJECT_H
 

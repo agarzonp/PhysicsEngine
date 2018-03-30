@@ -19,7 +19,7 @@ public:
 
 	void Update(PhysicObjects& objects, float deltaTime)
 	{
-		std::vector<ContactData> contacts;
+		Contacts contacts;
 
 		// Collision Detection
 		// TO-DO: replace brute force approach by a broad phase collision detection using spatial partitioning techniques
@@ -37,13 +37,10 @@ public:
 			}
 		}
 
-		// Collision Resolution
-		for (auto& contact : contacts)
-		{
-			collisionResolver.Resolve(contact, deltaTime);
-		}
 
-		contacts.clear();
+
+		// Collision Resolution
+		collisionResolver.Resolve(contacts, deltaTime);
 	}
 };
 

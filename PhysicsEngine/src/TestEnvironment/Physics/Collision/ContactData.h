@@ -1,6 +1,8 @@
 #ifndef CONTACT_DATA_H
 #define CONTACT_DATA_H
 
+#include <vector>
+
 #include "../PhysicsObject/PhysicObject.h"
 
 struct ContactData
@@ -18,5 +20,7 @@ struct ContactData
 	// depth of penetration in the direction of the contact normal
 	float penetration;
 };
+
+using Contacts = std::vector<ContactData>;
 
 #endif

@@ -5,10 +5,51 @@
 
 class CollisionResolver
 {
+
 public:
 	
-	// Resolve
- 	void Resolve(const ContactData& contact, float deltaTime)
+	void Resolve(const Contacts& contacts, float deltaTime)
+	{
+		// We do several iterations to fix the issue where a contact resolution is making another contact already resolved 
+		// to be back in contact again
+		size_t maxIterations = contacts.size() * 2;
+		size_t iteration = 0;
+		while (iteration < maxIterations)
+		{
+			// Resolve all the contacts by separating velocity order priority
+			// Those that have the worst separating velocity will be resolved first
+
+			float separatingVelocity = std::numeric_limits<float>::max();
+			const ContactData* contact = nullptr;
+
+			for (auto& c : contacts)
+			{
+				float s = GetSeparatingVelocity(c.objectA, c.objectB, c.normal);
+				if (s < separatingVelocity && (s < 0 || c.penetration > 0))
+				{
+					separatingVelocity = s;
+					contact = &c;
+				}
+			}
+
+			if (!contact)
+			{
+				// no more contacts to resolve
+				break;
+			}
+				
+			// resolve the contact
+			ResolveContact(*contact, deltaTime);
+
+			// advance iteration
+			iteration++;
+		}
+	}
+
+protected:
+
+	// Resolve contact
+	void ResolveContact(const ContactData& contact, float deltaTime)
 	{
 		assert(contact.objectA || contact.objectB); // No need to create a contact for 2 immovable objects
 
@@ -18,8 +59,6 @@ public:
 		// resolve interpenetration
 		ResolveInterpenetration(contact, deltaTime);
 	}
-
-private:
 
 	// Resolve velocity
 	void ResolveVelocity(const ContactData& contact, float deltaTime)
@@ -52,6 +91,32 @@ private:
 		}
 	}
 
+	// Resolve interpenetration
+	void ResolveInterpenetration(const ContactData& contact, float deltaTime)
+	{
+		float penetration = contact.penetration;
+		if (penetration <= 0)
+		{
+			// no penetration at all
+			return;
+		}
+
+		PhysicObject* objectA = contact.objectA;
+		PhysicObject* objectB = contact.objectB;
+
+		// calculate positional change and apply it to each object
+		MathGeom::Vector3 displacement = contact.normal * (penetration / GetTotalInverseMass(objectA, objectB));
+		MathGeom::Vector3 positionChange = displacement * objectA->InverseMass();
+		objectA->SetPosition(objectA->Position() + positionChange);
+		if (objectB)
+		{
+			positionChange = -displacement * objectB->InverseMass(); // negative because separating in opposite direction
+			objectB->SetPosition(objectB->Position() + positionChange);
+		}
+	}
+	
+private:
+
 	// Get separating velocity
 	float GetSeparatingVelocity(PhysicObject* objectA, PhysicObject* objectB, const MathGeom::Vector3& contactNormal)
 	{
@@ -83,31 +148,6 @@ private:
 		assert(totalInverseMass > 0);
 		return totalInverseMass;
 	}
-
-	// Resolve interpenetration
-	void ResolveInterpenetration(const ContactData& contact, float deltaTime)
-	{
-		float penetration = contact.penetration;
-		if (penetration <= 0)
-		{
-			// no penetration at all
-			return;
-		}
-
-		PhysicObject* objectA = contact.objectA;
-		PhysicObject* objectB = contact.objectB;
-
-		// calculate positional change and apply it to each object
-		MathGeom::Vector3 displacement = contact.normal * (penetration / GetTotalInverseMass(objectA, objectB));
-		MathGeom::Vector3 positionChange = displacement * objectA->InverseMass();
-		objectA->SetPosition(objectA->Position() + positionChange);
-		if (objectB)
-		{
-			positionChange = -displacement * objectB->InverseMass(); // negative because separating in opposite direction
-			objectB->SetPosition(objectB->Position() + positionChange);
-		}
-	}
-
 };
 
 #endif // !COLLISION_RESOLVER_H

@@ -27,7 +27,7 @@ public:
 private:
 
 	// Test collision
-	bool Test(const Collider& colliderA, const Collider& colliderB, std::vector<ContactData>& outContacts)
+	bool Test(const Collider& colliderA, const Collider& colliderB, Contacts& outContacts)
 	{
 		switch (GetCollisionTestType(colliderA, colliderB))
 		{
@@ -37,7 +37,7 @@ private:
 		case CollisionTest::Type::AABB_AABB:
 			return CollisionTest::AABB_AABB(colliderA, colliderB);
 		case CollisionTest::Type::AABB_PLANE:
-			return CollisionTest::AABB_Plane(colliderA, colliderB);
+			return CollisionTest::AABB_Plane(colliderA, colliderB, outContacts);
 		case CollisionTest::Type::AABB_SPHERE:
 			return CollisionTest::AABB_Sphere(colliderA, colliderB);
 		case CollisionTest::Type::SPHERE_PLANE:

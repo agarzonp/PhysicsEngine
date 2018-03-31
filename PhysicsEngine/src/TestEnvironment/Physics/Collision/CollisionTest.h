@@ -1,6 +1,8 @@
 #ifndef COLLISION_TEST_H
 #define COLLISION_TEST_H
 
+#include <array>
+
 #include "Colliders/Collider.h"
 
 #include "Colliders/AABBCollider.h"
@@ -63,6 +65,39 @@ public:
 		return std::fabs(distance) <= r;
 	}
 
+	static bool AABB_Plane(const Collider& colliderA, const Collider& colliderB, Contacts& outContacts)
+	{
+		if (!AABB_Plane(colliderA, colliderB))
+		{
+			// no collision at all
+			return false;
+		}
+
+		const AABBCollider& box = colliderA.GetType() == ColliderType::AABB ? *static_cast<const AABBCollider*>(&colliderA)
+			: *static_cast<const AABBCollider*>(&colliderB);
+
+		const PlaneCollider& plane = colliderA.GetType() == ColliderType::PLANE ? *static_cast<const PlaneCollider*>(&colliderA)
+			: *static_cast<const PlaneCollider*>(&colliderB);
+
+		// Generate a contact for each vertex of the box penetrating the plane 
+		std::array<MathGeom::Vector3, 8> vertices = box.Vertices();
+		for (auto& vertex : vertices)
+		{
+			float distance = DistanceTo::Plane(vertex, plane);
+			if (distance < 0.0f)
+			{
+				// vertext penetrated the plane, so create a contact (vertex-face contact)
+				ContactData contact; 
+				contact.normal = plane.normal;
+				contact.penetration = -distance;
+				contact.point = vertex; 
+				outContacts.push_back(contact);
+			}
+		}
+
+		return true;
+	}
+
 	static bool AABB_Sphere(const Collider& colliderA, const Collider& colliderB)
 	{
 		const AABBCollider& box = colliderA.GetType() == ColliderType::AABB ? *static_cast<const AABBCollider*>(&colliderA) 
@@ -81,7 +116,7 @@ public:
 		return distanceSq <= sphere.radius * sphere.radius;
 	}
 
-	static bool Sphere_Plane(const Collider& colliderA, const Collider& colliderB, std::vector<ContactData>& outContacts)
+	static bool Sphere_Plane(const Collider& colliderA, const Collider& colliderB, Contacts& outContacts)
 	{
 		const SphereCollider& sphere= colliderA.GetType() == ColliderType::SPHERE ? *static_cast<const SphereCollider*>(&colliderA)
 																				  : *static_cast<const SphereCollider*>(&colliderB);
@@ -95,7 +130,7 @@ public:
 		bool isCollision = std::fabsf(distance) < sphere.radius;
 		if (isCollision)
 		{
-			// generate contact point
+			// generate contact (face-face contact)
 			ContactData contact;
 			contact.normal = plane.normal;
 			contact.penetration = -(distance - sphere.radius);
@@ -107,7 +142,7 @@ public:
 		return isCollision;
 	}
 
-	static bool Sphere_Sphere(const Collider& colliderA, const Collider& colliderB, std::vector<ContactData>& outContacts)
+	static bool Sphere_Sphere(const Collider& colliderA, const Collider& colliderB, Contacts& outContacts)
 	{
 		const SphereCollider& sphereA = *static_cast<const SphereCollider*>(&colliderA); 
 		const SphereCollider& sphereB = *static_cast<const SphereCollider*>(&colliderB);
@@ -121,7 +156,7 @@ public:
 		bool isCollision = distanceSq <= radiusSum * radiusSum;
 		if (isCollision)
 		{
-			// generate contact point
+			// generate contact (face-face contact)
 			ContactData contact;
 			contact.normal = glm::normalize(fromBtoA);
 			contact.penetration = sphereA.radius + sphereB.radius - glm::length(fromBtoA);

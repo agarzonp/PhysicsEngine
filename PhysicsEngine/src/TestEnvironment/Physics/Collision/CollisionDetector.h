@@ -57,7 +57,7 @@ private:
 		case CollisionTest::Type::AABB_SPHERE:
 			return CollisionTest::AABB_Sphere(colliderA, colliderB);
 		case CollisionTest::Type::SPHERE_PLANE:
-			return CollisionTest::Sphere_Plane(colliderA, colliderB);
+			return CollisionTest::Sphere_Plane(colliderA, colliderB, outContact);
 		case CollisionTest::Type::SPHERE_SPHERE:
 			return CollisionTest::Sphere_Sphere(colliderA, colliderB, outContact);
 		default:

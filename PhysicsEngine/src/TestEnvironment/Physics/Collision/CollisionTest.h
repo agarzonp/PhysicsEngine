@@ -81,7 +81,7 @@ public:
 		return distanceSq <= sphere.radius * sphere.radius;
 	}
 
-	static bool Sphere_Plane(const Collider& colliderA, const Collider& colliderB)
+	static bool Sphere_Plane(const Collider& colliderA, const Collider& colliderB, ContactData& outContact)
 	{
 		const SphereCollider& sphere= colliderA.GetType() == ColliderType::SPHERE ? *static_cast<const SphereCollider*>(&colliderA)
 																				  : *static_cast<const SphereCollider*>(&colliderB);
@@ -92,7 +92,14 @@ public:
 		// All points in a Plane satisfy dot(plane.normal, p) = plane.d
 		// Therefore, if p = sphere.center there will be an intersection if the distance from the plane is less than the sphere radius
 		float distance = DistanceTo::Plane(sphere.transform.position, plane);
-		return std::fabsf(distance) < sphere.radius;
+		bool isCollision = std::fabsf(distance) < sphere.radius;
+		if (isCollision)
+		{
+			outContact.normal = plane.normal;
+			outContact.penetration = -(distance - sphere.radius);
+		}
+
+		return isCollision;
 	}
 
 	static bool Sphere_Sphere(const Collider& colliderA, const Collider& colliderB, ContactData& outContact)

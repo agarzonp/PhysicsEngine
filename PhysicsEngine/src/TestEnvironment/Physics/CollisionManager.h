@@ -4,22 +4,36 @@
 #include "PhysicsObject/PhysicObject.h"
 
 #include "Collision/ContactData.h"
-#include "Collision/CollisionDetector.h"
-#include "Collision/CollisionResolver.h"
+#include "Collision/ContactsGenerator.h"
+#include "Collision/ContactsResolver.h"
 
 class CollisionManager
 {
-	// Collision detector
-	CollisionDetector collisionDetector;
+	// maximum of contacts
+	size_t maxContacts{ 100 };
 
-	// Collision resolver
-	CollisionResolver collisionResolver;
+	// contacts
+	Contacts contacts;
+
+	// Contacts generator
+	ContactGenerator contactsGenerator;
+
+	// Contatcs resolver
+	ContactsResolver contactsResolver;
 
 public:
 
+	// Init
+	void Init(size_t maxContacts)
+	{
+		this->maxContacts = maxContacts;
+		contacts.reserve(maxContacts);
+	}
+
+	// Update
 	void Update(PhysicObjects& objects, float deltaTime)
 	{
-		Contacts contacts;
+		contacts.clear();
 
 		// Collision Detection
 		// TO-DO: replace brute force approach by a broad phase collision detection using spatial partitioning techniques
@@ -27,19 +41,25 @@ public:
 		{
 			for (size_t j = i + 1; j < objects.size(); j++)
 			{
-				ContactData contact;
-				if (collisionDetector.IsCollision(*objects[i], *objects[j], contact))
+				// generate contacts between colliding pair of objects
+				if (contactsGenerator.GenerateContacts(*objects[i], *objects[j]))
 				{
 					printf("Collision!\n");
-					assert(contact.objectA);
 
-					contacts.emplace_back(contact);
+					// append generated contacts
+					contacts.insert(contacts.end(), contactsGenerator.GetContacts().begin(), contactsGenerator.GetContacts().end());
 				}
 			}
 		}
 
-		// Collision Resolution
-		collisionResolver.Resolve(contacts, deltaTime);
+		if (contacts.size() > 0)
+		{
+			assert(contacts.size() <= maxContacts);
+			printf("Number of contacts: %d\n", contacts.size());
+
+			// resolve contacts
+			contactsResolver.Resolve(contacts, deltaTime);
+		}
 	}
 };
 

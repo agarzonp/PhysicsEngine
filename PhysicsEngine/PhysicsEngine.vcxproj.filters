@@ -155,11 +155,14 @@
     <ClInclude Include="src\TestEnvironment\Physics\Collision\ContactData.h">
       <Filter>Source Files\TestEnvironment\Physics\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="src\TestEnvironment\Physics\Collision\CollisionResolver.h">
-      <Filter>Source Files\TestEnvironment\Physics\Collision</Filter>
-    </ClInclude>
     <ClInclude Include="src\TestEnvironment\Physics\CollisionManager.h">
       <Filter>Source Files\TestEnvironment\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Physics\Collision\ContactsGenerator.h">
+      <Filter>Source Files\TestEnvironment\Physics\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Physics\Collision\ContactsResolver.h">
+      <Filter>Source Files\TestEnvironment\Physics\Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

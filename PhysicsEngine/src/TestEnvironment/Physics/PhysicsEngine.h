@@ -36,6 +36,9 @@ public:
 	void Init()
 	{
 		particles.reserve(MAX_PARTICLE_OBJECTS);
+		
+		size_t maxContacts = 500;
+		collisionManager.Init(maxContacts);
 	}
 
 	// Add physic to the game object

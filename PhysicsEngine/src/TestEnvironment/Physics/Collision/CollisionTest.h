@@ -81,7 +81,7 @@ public:
 		return distanceSq <= sphere.radius * sphere.radius;
 	}
 
-	static bool Sphere_Plane(const Collider& colliderA, const Collider& colliderB, ContactData& outContact)
+	static bool Sphere_Plane(const Collider& colliderA, const Collider& colliderB, std::vector<ContactData>& outContacts)
 	{
 		const SphereCollider& sphere= colliderA.GetType() == ColliderType::SPHERE ? *static_cast<const SphereCollider*>(&colliderA)
 																				  : *static_cast<const SphereCollider*>(&colliderB);
@@ -95,16 +95,19 @@ public:
 		bool isCollision = std::fabsf(distance) < sphere.radius;
 		if (isCollision)
 		{
-			outContact.normal = plane.normal;
-			outContact.penetration = -(distance - sphere.radius);
-			outContact.point = sphere.transform.position - plane.normal * outContact.penetration;
+			// generate contact point
+			ContactData contact;
+			contact.normal = plane.normal;
+			contact.penetration = -(distance - sphere.radius);
+			contact.point = sphere.transform.position - plane.normal * contact.penetration;
 			
+			outContacts.push_back(contact);
 		}
 
 		return isCollision;
 	}
 
-	static bool Sphere_Sphere(const Collider& colliderA, const Collider& colliderB, ContactData& outContact)
+	static bool Sphere_Sphere(const Collider& colliderA, const Collider& colliderB, std::vector<ContactData>& outContacts)
 	{
 		const SphereCollider& sphereA = *static_cast<const SphereCollider*>(&colliderA); 
 		const SphereCollider& sphereB = *static_cast<const SphereCollider*>(&colliderB);
@@ -118,10 +121,11 @@ public:
 		bool isCollision = distanceSq <= radiusSum * radiusSum;
 		if (isCollision)
 		{
-			// fill contact data
-			outContact.normal = glm::normalize(fromBtoA);
-			outContact.penetration = sphereA.radius + sphereB.radius - glm::length(fromBtoA);
-			outContact.point = sphereB.transform.position + outContact.normal*sphereB.radius;
+			// generate contact point
+			ContactData contact;
+			contact.normal = glm::normalize(fromBtoA);
+			contact.penetration = sphereA.radius + sphereB.radius - glm::length(fromBtoA);
+			contact.point = sphereB.transform.position + contact.normal*sphereB.radius;
 		}
 
 		return isCollision;

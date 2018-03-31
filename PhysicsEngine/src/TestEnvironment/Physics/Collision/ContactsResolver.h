@@ -1,9 +1,9 @@
-#ifndef COLLISION_RESOLVER_H
-#define COLLISION_RESOLVER_H
+#ifndef CONTACTS_RESOLVER_H
+#define CONTACTS_RESOLVER_H
 
 #include "ContactData.h"
 
-class CollisionResolver
+class ContactsResolver
 {
 
 public:

@@ -10,7 +10,7 @@ class CollisionDetector
 public:
 
 	// IsCollision
-	bool IsCollision(PhysicObject& objectA, PhysicObject& objectB, ContactData& outContact)
+	bool IsCollision(PhysicObject& objectA, PhysicObject& objectB, Contacts& outContacts)
 	{
 		if (!objectA.HasCollider() || !objectB.HasCollider())
 		{
@@ -21,29 +21,13 @@ public:
 		const Collider& colliderA = objectA.GetCollider();
 		const Collider& colliderB = objectB.GetCollider();
 
-		if (Test(colliderA, colliderB, outContact))
-		{
-			outContact.objectA = objectA.InverseMass() > 0 ? &objectA : &objectB;
-			outContact.objectB = outContact.objectA == &objectA ? &objectB : &objectA;
-
-			assert(outContact.objectA->InverseMass() > 0);
-
-			if (outContact.objectB->InverseMass() <= 0)
-			{
-				// contact resolution not needed for immovable object
-				outContact.objectB = nullptr;
-			}
-
-			return true;
-		}
-
-		return false;
+		return Test(colliderA, colliderB, outContacts);
 	}
 
 private:
 
 	// Test collision
-	bool Test(const Collider& colliderA, const Collider& colliderB, ContactData& outContact)
+	bool Test(const Collider& colliderA, const Collider& colliderB, std::vector<ContactData>& outContacts)
 	{
 		switch (GetCollisionTestType(colliderA, colliderB))
 		{
@@ -57,9 +41,9 @@ private:
 		case CollisionTest::Type::AABB_SPHERE:
 			return CollisionTest::AABB_Sphere(colliderA, colliderB);
 		case CollisionTest::Type::SPHERE_PLANE:
-			return CollisionTest::Sphere_Plane(colliderA, colliderB, outContact);
+			return CollisionTest::Sphere_Plane(colliderA, colliderB, outContacts);
 		case CollisionTest::Type::SPHERE_SPHERE:
-			return CollisionTest::Sphere_Sphere(colliderA, colliderB, outContact);
+			return CollisionTest::Sphere_Sphere(colliderA, colliderB, outContacts);
 		default:
 			assert(false);
 			break;

@@ -14,6 +14,9 @@ struct ContactData
 	// contact normal (from objectA perspective)
 	MathGeom::Vector3 normal;
 
+	// Contact point
+	MathGeom::Vector3 point;
+
 	// coefficient of restitution (the speed at which the objects will separate after colliding)
 	float restitution{ 1.0f };
 

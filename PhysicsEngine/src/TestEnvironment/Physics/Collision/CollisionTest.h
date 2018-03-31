@@ -97,6 +97,8 @@ public:
 		{
 			outContact.normal = plane.normal;
 			outContact.penetration = -(distance - sphere.radius);
+			outContact.point = sphere.transform.position - plane.normal * outContact.penetration;
+			
 		}
 
 		return isCollision;
@@ -119,6 +121,7 @@ public:
 			// fill contact data
 			outContact.normal = glm::normalize(fromBtoA);
 			outContact.penetration = sphereA.radius + sphereB.radius - glm::length(fromBtoA);
+			outContact.point = sphereB.transform.position + outContact.normal*sphereB.radius;
 		}
 
 		return isCollision;

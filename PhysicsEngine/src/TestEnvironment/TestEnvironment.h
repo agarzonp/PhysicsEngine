@@ -169,7 +169,7 @@ protected:
 	{
 		// green object
 		GameObject greenObject;
-		greenObject.transform.position = glm::vec3(-20.0f, 5.5f, 40.0f);
+		greenObject.transform.position = glm::vec3(-20.0f, 8.5f, 40.0f);
 		greenObject.transform.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 		greenObject.transform.scale = glm::vec3(2.0f, 2.0f, 2.0f);
 		float sphereRadius = greenObject.transform.scale.x;
@@ -182,11 +182,11 @@ protected:
 		PhysicObjectDesc greenPhysicObject;
 		greenPhysicObject.type = PhysicObjectType::PARTICLE;
 		greenPhysicObject.mass = 10.0f;
-		greenPhysicObject.velocity = MathGeom::Vector3(0.1f, 0.0f, 0.0f);
-		greenPhysicObject.acceleration = MathGeom::Vector3(0.1f, 0.0f, 0.0f);
+		greenPhysicObject.velocity = MathGeom::Vector3(0.6f, 0.0f, 0.0f);
+		greenPhysicObject.acceleration = MathGeom::Vector3(0.6f, 0.0f, 0.0f);
 		//greenPhysicObject.colliderDesc = std::make_unique<SphereColliderDesc>(gameObjects.back().transform);
 		greenPhysicObject.colliderDesc = std::make_unique<AABBColliderDesc>(gameObjects.back().transform);
-		greenPhysicObject.isAffectedByGravity = true;
+		greenPhysicObject.isAffectedByGravity = false;
 
 		physicsEngine.AddPhysics(gameObjects.back(), greenPhysicObject);
 
@@ -205,8 +205,8 @@ protected:
 		PhysicObjectDesc redPhysicObject;
 		redPhysicObject.type = PhysicObjectType::PARTICLE;
 		redPhysicObject.mass = 10.0f;
-		redPhysicObject.velocity = MathGeom::Vector3(-0.1f, 0.0f, 0.0f);
-		redPhysicObject.acceleration = MathGeom::Vector3(-0.1f, 0.0f, 0.0f);
+		redPhysicObject.velocity = MathGeom::Vector3(-0.3f, 0.0f, 0.0f);
+		redPhysicObject.acceleration = MathGeom::Vector3(-0.3f, 0.0f, 0.0f);
 		redPhysicObject.colliderDesc = std::make_unique<SphereColliderDesc>(gameObjects.back().transform);
 		//redPhysicObject.colliderDesc = std::make_unique<AABBColliderDesc>(gameObjects.back().transform);
 		redPhysicObject.isAffectedByGravity = false;

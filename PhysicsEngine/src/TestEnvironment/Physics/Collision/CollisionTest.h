@@ -98,7 +98,7 @@ public:
 		return true;
 	}
 
-	static bool AABB_Sphere(const Collider& colliderA, const Collider& colliderB)
+	static bool AABB_Sphere(const Collider& colliderA, const Collider& colliderB, Contacts& outContacts)
 	{
 		const AABBCollider& box = colliderA.GetType() == ColliderType::AABB ? *static_cast<const AABBCollider*>(&colliderA) 
 																			: *static_cast<const AABBCollider*>(&colliderB);
@@ -113,7 +113,19 @@ public:
 		// intersection if the squared distance between them is less than sphere squared radius
 		auto fromSphereToAABB = closestPointOnAABB - sphereCenter;
 		float distanceSq = fromSphereToAABB.x * fromSphereToAABB.x + fromSphereToAABB.y * fromSphereToAABB.y + fromSphereToAABB.z * fromSphereToAABB.z;
-		return distanceSq <= sphere.radius * sphere.radius;
+		bool isCollision = distanceSq <= sphere.radius * sphere.radius;
+		if (isCollision)
+		{
+			// generate contact (vertext-face, edge-face or face-face contact)
+			ContactData contact;
+			contact.normal = colliderA.GetType() == ColliderType::SPHERE ? glm::normalize(-fromSphereToAABB) : glm::normalize(fromSphereToAABB);
+			contact.penetration = std::sqrtf(distanceSq) - sphere.radius;
+			contact.point = closestPointOnAABB;
+
+			outContacts.push_back(contact);
+		}
+
+		return isCollision;
 	}
 
 	static bool Sphere_Plane(const Collider& colliderA, const Collider& colliderB, Contacts& outContacts)

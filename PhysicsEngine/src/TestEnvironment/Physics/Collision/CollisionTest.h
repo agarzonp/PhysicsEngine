@@ -26,21 +26,73 @@ public:
 		SPHERE_SPHERE,
 	};
 
-	static bool AABB_AABB(const Collider& colliderA, const Collider& colliderB)
+	static bool AABB_AABB(const Collider& colliderA, const Collider& colliderB, Contacts& outContacts)
 	{
 		const AABBCollider& boxA = *static_cast<const AABBCollider*>(&colliderA);
 		const AABBCollider& boxB = *static_cast<const AABBCollider*>(&colliderB);
 
-		// check overlap in all the axes
-		if (std::fabsf(boxA.transform.position.x - boxB.transform.position.x) > std::fabsf(boxA.halfSize.x + boxB.halfSize.x)) 
-			return false;
-		if (std::fabsf(boxA.transform.position.y - boxB.transform.position.y) > std::fabsf(boxA.halfSize.y + boxB.halfSize.y)) 
-			return false;
-		if (std::fabsf(boxA.transform.position.z - boxB.transform.position.z) > std::fabsf(boxA.halfSize.z + boxB.halfSize.z)) 
-			return false;
+		const MathGeom::Vector3& halfSizeA = boxA.halfSize;
+		const MathGeom::Vector3& halfSizeB = boxB.halfSize;
+		MathGeom::Vector3 fromAToB = boxB.transform.position - boxA.transform.position;
 
-		// overlap in all the axes
+		// check overlap in all the axes (Separating Axis Tests - SAT)
+		MathGeom::Vector3 axes[3] = { {1.0f, 0.0f, 0.0f}, { 0.0f, 1.0f, 0.0f }, { 0.0f, 0.0f, 1.0f } };
+		float bestOverlap = std::numeric_limits<float>::max();
+		MathGeom::Vector3& bestOverlapAxis = axes[0];
+		for (auto& axis : axes)
+		{
+			float overlap = GetOverlap_SAT(axis, fromAToB, halfSizeA, halfSizeB);
+			if (overlap < 0)
+			{
+				// no overlap
+				return false;
+			}
+			
+			if (overlap < bestOverlap)
+			{
+				bestOverlap = overlap;
+				bestOverlapAxis = axis;
+			}
+		}
+		
+		// overlap in all the axes, so boxes are in contact
+		// determine the contact (vertex-face contact)
+		
+		MathGeom::Vector3 contactNormal = bestOverlapAxis;
+		if (MathGeom::dot(contactNormal, fromAToB) > 0)
+		{
+			// Make sure that normal is always from A´s perspective, so we always look for the vertex in B interpenetrating with A
+			contactNormal *= -1.0f;
+		}
+
+		// contact vertex is the closest vertex to center
+		auto vertices = boxB.Vertices();
+		float bestDistSq = std::numeric_limits<float>::max();
+		MathGeom::Vector3& contactVertex = vertices[0];
+		for (auto& vertex : vertices)
+		{
+			MathGeom::Vector3 toA = boxA.transform.position - vertex;
+			float distSq = MathGeom::dot(toA, toA);
+			if (distSq < bestDistSq)
+			{
+				bestDistSq = distSq;
+				contactVertex = vertex;
+			}
+		}
+		
+		ContactData contact;
+		contact.normal = contactNormal;
+		contact.penetration = bestOverlap;
+		contact.point = contactVertex;
+
+		outContacts.push_back(contact);
 		return true;
+	}
+
+	static float GetOverlap_SAT(const MathGeom::Vector3& axis, const MathGeom::Vector3& fromAtoB, const MathGeom::Vector3& halfSizeA, const MathGeom::Vector3& halfSizeB)
+	{
+		float distance = std::fabsf(MathGeom::dot(axis, fromAtoB));
+		return MathGeom::dot(axis, halfSizeA) + MathGeom::dot(axis, halfSizeB) - distance;
 	}
 
 	static bool AABB_Plane(const Collider& colliderA, const Collider& colliderB)

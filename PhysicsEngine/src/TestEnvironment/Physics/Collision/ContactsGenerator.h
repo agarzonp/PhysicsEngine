@@ -28,6 +28,8 @@ public:
 			return false;
 		}
 
+		assert(contacts.size() > 0);
+
 		// make sure that objectA is not the immmovable object
 		for (auto& contact : contacts)
 		{

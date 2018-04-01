@@ -35,7 +35,7 @@ private:
 			return false;
 
 		case CollisionTest::Type::AABB_AABB:
-			return CollisionTest::AABB_AABB(colliderA, colliderB);
+			return CollisionTest::AABB_AABB(colliderA, colliderB, outContacts);
 		case CollisionTest::Type::AABB_PLANE:
 			return CollisionTest::AABB_Plane(colliderA, colliderB, outContacts);
 		case CollisionTest::Type::AABB_SPHERE:

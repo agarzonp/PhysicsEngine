@@ -127,7 +127,7 @@ private:
 			velocity -= objectB->Velocity();
 		}
 
-		return MathGeom::dot(velocity, contactNormal);
+		return MathGeom::Dot(velocity, contactNormal);
 	}
 
 	// Get Impulse

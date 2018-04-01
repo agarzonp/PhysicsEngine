@@ -59,7 +59,7 @@ public:
 		// determine the contact (vertex-face contact)
 		
 		MathGeom::Vector3 contactNormal = bestOverlapAxis;
-		if (MathGeom::dot(contactNormal, fromAToB) > 0)
+		if (MathGeom::Dot(contactNormal, fromAToB) > 0)
 		{
 			// Make sure that normal is always from A´s perspective, so we always look for the vertex in B interpenetrating with A
 			contactNormal *= -1.0f;
@@ -71,8 +71,7 @@ public:
 		MathGeom::Vector3& contactVertex = vertices[0];
 		for (auto& vertex : vertices)
 		{
-			MathGeom::Vector3 toA = boxA.transform.position - vertex;
-			float distSq = MathGeom::dot(toA, toA);
+			float distSq = MathGeom::DistanceSq(boxA.transform.position, vertex);
 			if (distSq < bestDistSq)
 			{
 				bestDistSq = distSq;
@@ -91,8 +90,8 @@ public:
 
 	static float GetOverlap_SAT(const MathGeom::Vector3& axis, const MathGeom::Vector3& fromAtoB, const MathGeom::Vector3& halfSizeA, const MathGeom::Vector3& halfSizeB)
 	{
-		float distance = std::fabsf(MathGeom::dot(axis, fromAtoB));
-		return MathGeom::dot(axis, halfSizeA) + MathGeom::dot(axis, halfSizeB) - distance;
+		float distance = std::fabsf(MathGeom::Dot(axis, fromAtoB));
+		return MathGeom::Dot(axis, halfSizeA) + MathGeom::Dot(axis, halfSizeB) - distance;
 	}
 
 	static bool AABB_Plane(const Collider& colliderA, const Collider& colliderB)

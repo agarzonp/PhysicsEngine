@@ -17,9 +17,15 @@ namespace MathGeom
 
 	const double PI = 3.14159265358979323846;
 
-	float dot(const Vector3& a, const Vector3& b)
+	float Dot(const Vector3& a, const Vector3& b)
 	{
 		return glm::dot(a, b);
+	}
+
+	float DistanceSq(const Vector3& a, const Vector3& b)
+	{
+		auto fromAtoB = b - a;
+		return Dot(fromAtoB, fromAtoB);
 	}
 
 }

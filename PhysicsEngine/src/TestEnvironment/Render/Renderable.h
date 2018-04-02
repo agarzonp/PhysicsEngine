@@ -59,13 +59,7 @@ protected:
 	virtual glm::mat4 ModelMatrix(const Transform& transform)
 	{
 		glm::mat4 model = glm::mat4();
-
-		model = glm::translate(model, transform.position)
-			* glm::rotate(model, transform.rotation.z, glm::vec3(0.0f, 0.0f, 1.0f))
-			* glm::rotate(model, transform.rotation.y, glm::vec3(0.0f, 1.0f, 0.0f))
-			* glm::rotate(model, transform.rotation.x, glm::vec3(1.0f, 0.0f, 0.0f))
-			* glm::scale(model, transform.scale);
-
+		model = glm::translate(model, transform.position) * transform.RotationMatrix4() * glm::scale(model, transform.scale);	
 		return model;
 	}
 };

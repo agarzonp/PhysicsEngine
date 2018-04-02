@@ -153,10 +153,12 @@ xcopy /Y /E "$(SolutionDir)common\lib\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="src\TestEnvironment\Physics\Forces\GravityForce.h" />
     <ClInclude Include="src\TestEnvironment\Physics\Forces\IForce.h" />
     <ClInclude Include="src\TestEnvironment\Physics\PhysicsEngine.h" />
+    <ClInclude Include="src\TestEnvironment\Physics\PhysicsObject\InertiaTensors.h" />
     <ClInclude Include="src\TestEnvironment\Physics\PhysicsObject\IPhysicObject.h" />
     <ClInclude Include="src\TestEnvironment\Physics\PhysicsObject\Particle.h" />
     <ClInclude Include="src\TestEnvironment\Physics\PhysicsObject\PhysicObject.h" />
     <ClInclude Include="src\TestEnvironment\Physics\PhysicsObject\PhysicObjectDesc.h" />
+    <ClInclude Include="src\TestEnvironment\Physics\PhysicsObject\RigidBody.h" />
     <ClInclude Include="src\TestEnvironment\Render\Meshes\CubeMesh.h" />
     <ClInclude Include="src\TestEnvironment\Render\Meshes\Mesh.h" />
     <ClInclude Include="src\TestEnvironment\Render\Meshes\SphereMesh.h" />

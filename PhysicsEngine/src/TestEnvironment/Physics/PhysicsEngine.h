@@ -6,8 +6,10 @@
 #include "../GameObject.h"
 
 #include "Forces/Forces.h"
+#include "PhysicsObject/InertiaTensors.h"
 #include "PhysicsObject/PhysicObjectDesc.h"
 #include "PhysicsObject/Particle.h"
+#include "PhysicsObject/RigidBody.h"
 
 #include "CollisionManager.h"
 
@@ -20,6 +22,11 @@ class PhysicsEngine
 	static const int MAX_PARTICLE_OBJECTS = 100;
 	using Particles = std::vector<Particle>;
 	Particles particles;
+
+	// rigid bodies
+	static const int MAX_RIGID_BODY_OBJECTS = 100;
+	using RigidBodies = std::vector<RigidBody>;
+	RigidBodies rigidBodies;
 
 	// forces map
 	using ForcesMapEntryFirst = PhysicObject*;
@@ -44,39 +51,27 @@ public:
 	// Add physic to the game object
 	IPhysicObject* AddPhysics(GameObject& object, const PhysicObjectDesc& desc)
 	{
-		switch (desc.type)
+		// create physic object
+		PhysicObject* physicObject = CreatePhysicObject(object, desc);
+		if (!physicObject)
 		{
-			case PhysicObjectType::PARTICLE:
-			{
-				assert(particles.size() < MAX_PARTICLE_OBJECTS);
-				if (particles.size() < MAX_PARTICLE_OBJECTS)
-				{
-					particles.emplace_back(Particle(object, desc));
-					physicObjects.emplace_back(&particles.back());
-				}
-				break;
-			}
-			default:
-			{
-				printf("PhysicObjectType (%d) not handled", (int)desc.type);
-				return nullptr;
-			}
+			return nullptr;
 		}
 
 		// set collider
-		SetCollider(physicObjects.back(), desc.colliderDesc);
+		SetCollider(physicObject, desc.colliderDesc);
 
 		// register gravity force
 		if (desc.isAffectedByGravity)
 		{
 			std::unique_ptr<IForce> gravityForce = std::make_unique<GravityForce>(MathGeom::Vector3(0.0f, -9.8f, 0.0f));
-			RegisterForce(physicObjects.back(), gravityForce);
+			RegisterForce(physicObject, gravityForce);
 		}
 		
 		// attach the physics object to the game object
-		object.SetPhysicObject(physicObjects.back());
+		object.SetPhysicObject(physicObject);
 
-		return physicObjects.back();
+		return physicObject;
 	}
 
 	// Update
@@ -106,6 +101,44 @@ public:
 	}
 
 private:
+
+	// Create Physic Object
+	PhysicObject* CreatePhysicObject(GameObject& object, const PhysicObjectDesc& desc)
+	{
+		PhysicObject* physicObject = nullptr;
+
+		switch (desc.type)
+		{
+		case PhysicObjectType::PARTICLE:
+		{
+			assert(particles.size() < MAX_PARTICLE_OBJECTS);
+			if (particles.size() < MAX_PARTICLE_OBJECTS)
+			{
+				particles.emplace_back(object, desc);
+				physicObjects.emplace_back(&particles.back());
+				physicObject = physicObjects.back();
+			}
+			break;
+		}
+
+		case PhysicObjectType::RIGID_BODY:
+		{
+			assert(rigidBodies.size() < MAX_RIGID_BODY_OBJECTS);
+			if (rigidBodies.size() < MAX_RIGID_BODY_OBJECTS)
+			{
+				rigidBodies.emplace_back(object, desc);
+				physicObjects.emplace_back(&rigidBodies.back());
+				physicObject = physicObjects.back();
+			}
+			break;
+		}
+		default:
+			printf("PhysicObjectType (%d) not handled", (int)desc.type);
+			break;
+		}
+
+		return physicObject;
+	}
 
 	// Set collider
 	void SetCollider(PhysicObject* physicObject, const std::unique_ptr<ColliderDesc>& colliderDesc)
@@ -179,6 +212,18 @@ private:
 		{
 			physicObject->Integrate(deltaTime);
 		}
+	}
+	
+public:
+
+	static MathGeom::Matrix3 CuboidIntertiaTensor(float mass, const MathGeom::Vector3& extent)
+	{
+		return InertiaTensors::Cuboid(mass, extent);
+	}
+
+	static MathGeom::Matrix3 SphereIntertiaTensor(float mass, float radius)
+	{
+		return InertiaTensors::Sphere(mass, radius);
 	}
 
 

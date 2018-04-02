@@ -9,6 +9,8 @@
 
 class PhysicObject : public IPhysicObject
 {
+protected:
+
 	// game object
 	GameObject* gameObject {nullptr};
 
@@ -16,7 +18,7 @@ class PhysicObject : public IPhysicObject
 	float mass {0.0f};
 	float inverseMass {0.0f};
 
-	// position, velocity and acceleration
+	// linear position, velocity and acceleration
 	MathGeom::Vector3 position;
 	MathGeom::Vector3 velocity;
 	MathGeom::Vector3 acceleration;
@@ -41,8 +43,11 @@ public:
 	{
 	}
 
+	// Integrate
+	virtual void Integrate(float deltaTime) = 0;
+
 	// Add force
-	void AddForce(const MathGeom::Vector3& force) final
+	void AddForce(const MathGeom::Vector3& force) override
 	{
 		accumulatedForces += force;
 	}
@@ -88,26 +93,6 @@ public:
 		gameObject->SetPosition(position);
 	}
 
-	// Integrate
-	void Integrate(float deltaTime)
-	{
-		if (inverseMass <= 0.0f)
-		{
-			// Do not integrate objects with infinite mass (static objects)
-			return;
-		}
-
-		// update velocity 
-		velocity += (acceleration + accumulatedForces*inverseMass)*deltaTime;
-
-		// update position
-		auto newPosition = position + velocity*deltaTime;
-		SetPosition(newPosition);
-
-		// reset accumulated forces
-		accumulatedForces = MathGeom::Vector3();
-	}
-
 	// Debg render collider
 	void DebugRenderCollider(const glm::mat4& viewProjection)
 	{
@@ -117,6 +102,26 @@ public:
 		}
 	}
 
+protected:
+
+	void IntegrateLinear(float deltaTime)
+	{
+		assert(inverseMass > 0.0f);
+
+		// update acceleration by applying forces
+		MathGeom::Vector3 finalAcceleration = acceleration;
+		finalAcceleration += accumulatedForces*inverseMass;
+
+		// update linear velocity 
+		velocity += finalAcceleration*deltaTime;
+
+		// update linear position
+		auto newPosition = position + velocity*deltaTime;
+		SetPosition(newPosition);
+
+		// reset accumulated forces
+		accumulatedForces = MathGeom::Vector3();
+	}
 };
 
 using PhysicObjects = std::vector<PhysicObject*>;

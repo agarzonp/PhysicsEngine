@@ -164,6 +164,12 @@
     <ClInclude Include="src\TestEnvironment\Physics\Collision\ContactsResolver.h">
       <Filter>Source Files\TestEnvironment\Physics\Collision</Filter>
     </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Physics\PhysicsObject\RigidBody.h">
+      <Filter>Source Files\TestEnvironment\Physics\PhysicObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestEnvironment\Physics\PhysicsObject\InertiaTensors.h">
+      <Filter>Source Files\TestEnvironment\Physics\PhysicObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">

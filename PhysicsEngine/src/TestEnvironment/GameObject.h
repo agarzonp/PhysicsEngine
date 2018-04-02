@@ -34,6 +34,17 @@ public:
 		}
 	}
 
+	// Set orientation
+	void SetOrientation(MathGeom::Quaternion& orientation)
+	{
+		transform.orientation = orientation;
+
+		if (physicObject)
+		{
+			physicObject->SetTransform(transform);
+		}
+	}
+
 	// Set renderable
 	void SetRenderable(std::shared_ptr<Renderable>& renderable_) { renderable = renderable_; }
 

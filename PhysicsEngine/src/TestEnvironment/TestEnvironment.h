@@ -170,7 +170,6 @@ protected:
 		// green object
 		GameObject greenObject;
 		greenObject.transform.position = glm::vec3(-20.0f, 8.5f, 40.0f);
-		greenObject.transform.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 		greenObject.transform.scale = glm::vec3(2.0f, 2.0f, 2.0f);
 		float sphereRadius = greenObject.transform.scale.x;
 		//greenObject.SetRenderable(std::shared_ptr<Renderable>(static_cast<Renderable*>(new SphereRenderable(sphereRadius, &sphereMesh, shader, glm::vec4(0.0f, 0.3f, 0.0f, 1.0f)))));
@@ -180,10 +179,13 @@ protected:
 		gameObjects.emplace_back(greenObject);
 
 		PhysicObjectDesc greenPhysicObject;
-		greenPhysicObject.type = PhysicObjectType::PARTICLE;
+		greenPhysicObject.type = PhysicObjectType::RIGID_BODY;
 		greenPhysicObject.mass = 10.0f;
 		greenPhysicObject.velocity = MathGeom::Vector3(0.6f, 0.0f, 0.0f);
 		greenPhysicObject.acceleration = MathGeom::Vector3(0.6f, 0.0f, 0.0f);
+		greenPhysicObject.angularVelocity = MathGeom::Vector3(0.0f, 1.0f, 0.0f);
+		greenPhysicObject.inertiaTensor = PhysicsEngine::CuboidIntertiaTensor(greenPhysicObject.mass, gameObjects.back().transform.scale);
+		//greenPhysicObject.inertiaTensor = PhysicsEngine::SphereIntertiaTensor(greenPhysicObject.mass, gameObjects.back().transform.scale.x);
 		//greenPhysicObject.colliderDesc = std::make_unique<SphereColliderDesc>(gameObjects.back().transform);
 		greenPhysicObject.colliderDesc = std::make_unique<AABBColliderDesc>(gameObjects.back().transform);
 		greenPhysicObject.isAffectedByGravity = false;
@@ -193,7 +195,7 @@ protected:
 		// red object
 		GameObject redObject;
 		redObject.transform.position = glm::vec3(25.0f, 5.5f, 40.0f);
-		redObject.transform.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+		//redObject.transform.orientation = glm::angleAxis(glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		redObject.transform.scale = glm::vec3(3.0f, 3.0f, 3.0f);
 		sphereRadius = redObject.transform.scale.x;
 		//redObject.SetRenderable(std::shared_ptr<Renderable>(static_cast<Renderable*>(new SphereRenderable(sphereRadius, &sphereMesh, shader, glm::vec4(0.5f, 0.0f, 0.0f, 1.0f)))));
@@ -207,6 +209,8 @@ protected:
 		redPhysicObject.mass = 10.0f;
 		redPhysicObject.velocity = MathGeom::Vector3(-0.3f, 0.0f, 0.0f);
 		redPhysicObject.acceleration = MathGeom::Vector3(-0.3f, 0.0f, 0.0f);
+		redPhysicObject.inertiaTensor = PhysicsEngine::CuboidIntertiaTensor(redPhysicObject.mass, gameObjects.back().transform.scale);
+		//redPhysicObject.inertiaTensor = PhysicsEngine::SphereIntertiaTensor(redPhysicObject.mass, gameObjects.back().transform.scale.x);
 		//redPhysicObject.colliderDesc = std::make_unique<SphereColliderDesc>(gameObjects.back().transform);
 		redPhysicObject.colliderDesc = std::make_unique<AABBColliderDesc>(gameObjects.back().transform);
 		redPhysicObject.isAffectedByGravity = false;

@@ -17,11 +17,32 @@ namespace MathGeom
 
 	const double PI = 3.14159265358979323846;
 
+	// inverse
+	template<class Matrix>
+	Matrix Inverse(const Matrix& mat)
+	{
+		return glm::inverse(mat);
+	}
+
+	// To Matrix3 from a quaternion
+	Matrix4 ToMatrix4(const Quaternion& q)
+	{
+		return glm::toMat4(q);
+	}
+
+	// To Matrix4 from a quaternion
+	Matrix4 ToMatrix3(const Quaternion& q)
+	{
+		return glm::toMat3(q);
+	}
+	
+	// Dot product
 	float Dot(const Vector3& a, const Vector3& b)
 	{
 		return glm::dot(a, b);
 	}
 
+	// Distance squared
 	float DistanceSq(const Vector3& a, const Vector3& b)
 	{
 		auto fromAtoB = b - a;

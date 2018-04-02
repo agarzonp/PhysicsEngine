@@ -23,21 +23,13 @@ public:
 
 public:
 
-	// Set position
-	void SetPosition(MathGeom::Vector3& pos) 
-	{
-		transform.position = pos;
+	// Set transform
+	void SetTransform(const Transform& transform) { this->transform = transform; }
 
-		if (physicObject)
-		{
-			physicObject->SetTransform(transform);
-		}
-	}
-
-	// Set orientation
-	void SetOrientation(MathGeom::Quaternion& orientation)
+	// Sync transform
+	void SyncTransform(const Transform& transform)
 	{
-		transform.orientation = orientation;
+		SetTransform(transform);
 
 		if (physicObject)
 		{

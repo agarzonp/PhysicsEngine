@@ -5,9 +5,6 @@
 
 class RigidBody : public PhysicObject
 {
-	// Orientation
-	MathGeom::Quaternion orientation;
-
 	// Angular velocity
 	MathGeom::Vector3 angularVelocity;
 
@@ -34,7 +31,6 @@ public:
 	RigidBody() = default;
 	RigidBody(GameObject& object, const PhysicObjectDesc& desc)
 		: PhysicObject(object, desc)
-		, orientation(object.transform.orientation)
 		, angularVelocity(desc.angularVelocity)
 	{
 		inverseInertiaTensorLocal = MathGeom::Inverse(desc.inertiaTensor);
@@ -43,14 +39,11 @@ public:
 	}
 
 	// Set orientation
-	void SetOrientation(const MathGeom::Quaternion& q)
+	void SetOrientation(const MathGeom::Quaternion& orientation)
 	{
-		orientation = q;
+		transform.orientation = orientation;
 
-		// set the new orientation to the game object
-		// If the game object has a physics object attached, the transform of the collider will be updated too
-		// So we make sure that if the object orientation is not handled by the integrator, the collider is still updated correctly
-		gameObject->SetOrientation(orientation);
+		SyncColliderTransform();
 	}
 
 
@@ -69,11 +62,11 @@ public:
 		// integrate angular components
 		IntegrateAngular(deltaTime);
 
-		// reset accumulated forces and torques
-		accumulatedForces = MathGeom::Vector3();
-
 		// update cached data
 		UpdateCachedData();
+
+		// Sync transform
+		SyncTransform();
 	}
 
 protected:
@@ -89,9 +82,8 @@ protected:
 
 		// update angular position
 		MathGeom::Quaternion angularVelocityQuaternion(0, angularVelocity*deltaTime);
-		auto newOrientation = orientation + angularVelocityQuaternion * orientation;
-		SetOrientation(newOrientation);
-
+		transform.orientation += (angularVelocityQuaternion * transform.orientation)*0.5f;
+	
 		// reset accumulated torques
 		accumulatedTorques = MathGeom::Vector3();
 	}
@@ -105,11 +97,11 @@ private:
 	void UpdateCachedData()
 	{
 		// normalize orientation so we make sure that is valid for rotations
-		orientation = glm::normalize(orientation);
+		transform.orientation = glm::normalize(transform.orientation);
 
 		// update fromLocalToWorld transform
-		cachedData.localToWorld = MathGeom::ToMatrix3(orientation);
-		cachedData.localToWorld[3] = MathGeom::Vector4(position, 1.0f);
+		cachedData.localToWorld = MathGeom::ToMatrix3(transform.orientation);
+		cachedData.localToWorld[3] = MathGeom::Vector4(transform.position, 1.0f);
 
 		// update inertia tensor in world space (change of basis transform  = Mb*Mt*inverse(Mb))
 		// Note: the inverse of a rotation matrix is the transposeof the matrix

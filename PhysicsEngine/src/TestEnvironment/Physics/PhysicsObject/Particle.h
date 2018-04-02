@@ -25,6 +25,9 @@ public:
 
 		// integrate linear
 		IntegrateLinear(deltaTime);
+
+		// sync transform
+		SyncTransform();
 	}
 
 };

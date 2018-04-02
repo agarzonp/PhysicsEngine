@@ -13,13 +13,13 @@ protected:
 
 	// game object
 	GameObject* gameObject {nullptr};
+	Transform transform;
 
 	// mass
 	float mass {0.0f};
 	float inverseMass {0.0f};
 
-	// linear position, velocity and acceleration
-	MathGeom::Vector3 position;
+	// linear velocity and acceleration
 	MathGeom::Vector3 velocity;
 	MathGeom::Vector3 acceleration;
 	
@@ -35,9 +35,9 @@ public:
 	PhysicObject() = default;
 	PhysicObject(GameObject& gameObject_, const PhysicObjectDesc& desc)
 		: gameObject(&gameObject_)
+		, transform(gameObject->transform)
 		, mass(desc.mass)
 		, inverseMass(desc.mass > 0.0f ? 1.0f/desc.mass : 0.0f)
-		, position(gameObject_.transform.position)
 		, velocity(desc.velocity)
 		, acceleration(desc.acceleration)
 	{
@@ -59,10 +59,9 @@ public:
 	// Set transform
 	void SetTransform(const Transform& transform) final
 	{
-		if (collider)
-		{
-			collider->SetTransform(transform);
-		}
+		this->transform = transform;
+
+		SyncColliderTransform();
 	}
 
 	// Set collider
@@ -82,15 +81,12 @@ public:
 	MathGeom::Vector3& Velocity() { return velocity; }
 
 	// Position getter/setter
-	const MathGeom::Vector3& Position() const { return position; }
+	const MathGeom::Vector3& Position() const { return transform.position; }
 	void SetPosition(const MathGeom::Vector3& pos)
 	{
-		position = pos;
+		transform.position = pos;
 
-		// set the new position to the game object
-		// If the game object has a physics object attached, the transform of the collider will be updated too
-		// So we make sure that if the object movement is not handled by the integrator, the collider is still updated correctly
-		gameObject->SetPosition(position);
+		SyncColliderTransform();
 	}
 
 	// Debg render collider
@@ -104,6 +100,7 @@ public:
 
 protected:
 
+	// Integrate linear components
 	void IntegrateLinear(float deltaTime)
 	{
 		assert(inverseMass > 0.0f);
@@ -116,11 +113,29 @@ protected:
 		velocity += finalAcceleration*deltaTime;
 
 		// update linear position
-		auto newPosition = position + velocity*deltaTime;
-		SetPosition(newPosition);
-
+		transform.position += velocity*deltaTime;
+		
 		// reset accumulated forces
 		accumulatedForces = MathGeom::Vector3();
+	}
+
+	// sync transform
+	void SyncTransform()
+	{
+		// set the transform to the game object
+		gameObject->SetTransform(transform);
+
+		// set the transform to the collider
+		SyncColliderTransform();
+	}
+
+	// sync collider transform
+	void SyncColliderTransform()
+	{
+		if (collider)
+		{
+			collider->SetTransform(transform);
+		}
 	}
 };
 

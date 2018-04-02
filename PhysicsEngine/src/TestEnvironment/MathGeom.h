@@ -31,7 +31,7 @@ namespace MathGeom
 	}
 
 	// To Matrix4 from a quaternion
-	Matrix4 ToMatrix3(const Quaternion& q)
+	Matrix3 ToMatrix3(const Quaternion& q)
 	{
 		return glm::toMat3(q);
 	}

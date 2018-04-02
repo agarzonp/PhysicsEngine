@@ -100,7 +100,7 @@ private:
 		transform.orientation = glm::normalize(transform.orientation);
 
 		// update fromLocalToWorld transform
-		cachedData.localToWorld = MathGeom::ToMatrix3(transform.orientation);
+		cachedData.localToWorld = MathGeom::ToMatrix4(transform.orientation);
 		cachedData.localToWorld[3] = MathGeom::Vector4(transform.position, 1.0f);
 
 		// update inertia tensor in world space (change of basis transform  = Mb*Mt*inverse(Mb))

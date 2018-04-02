@@ -15,13 +15,21 @@ public:
 	SphereCollider(Transform& transform)
 		: Collider(ColliderType::SPHERE, transform)
 	{
-		radius = std::fmaxf(std::fmaxf(transform.scale.x, transform.scale.y), transform.scale.z);
+		UpdateFromTransform();
 	}
 
 	// Debug Render
 	void DebugRender(const glm::mat4& viewProjection) final
 	{
 		RenderUtils::RenderSphere(viewProjection, radius + 0.01f, transform, 0xFFFFFF);
+	}
+
+protected:
+
+	// update from transform
+	void UpdateFromTransform() final
+	{
+		radius = std::fmaxf(std::fmaxf(transform.scale.x, transform.scale.y), transform.scale.z);
 	}
 };
 

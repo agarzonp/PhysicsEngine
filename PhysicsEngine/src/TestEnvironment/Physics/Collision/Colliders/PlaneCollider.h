@@ -34,6 +34,12 @@ private:
 		normal = glm::normalize(glm::cross(pointB - pointA, pointC - pointA));
 		d = glm::dot(normal, pointA);
 	}
+
+	// update from transform
+	void UpdateFromTransform() final
+	{
+		// nothing to do here
+	}
 };
 
 #endif // !SPHERE_COLLIDER_H

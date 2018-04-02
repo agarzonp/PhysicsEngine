@@ -38,10 +38,18 @@ public:
 	ColliderType GetType() const { return type; }
 
 	// Set transform
-	void SetTransform(const Transform& transform_) { transform = transform_; }
+	void SetTransform(const Transform& transform_) 
+	{ 
+		transform = transform_; 
+		UpdateFromTransform(); 
+	}
 
 	// Debug Render
 	virtual void DebugRender(const glm::mat4& viewProjection) = 0;
+
+protected:
+
+	virtual void UpdateFromTransform() = 0;
 };
 
 #endif // !COLLIDER_H
